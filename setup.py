@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import os
-import sys
 from setuptools import setup
 
 
@@ -29,7 +28,7 @@ setup(name='tcms-api',
       python_requires='>=3.6',
       install_requires=[
           'requests',
-          'winkerberos' if sys.platform.startswith("win") else 'kerberos',
+          'gssapi',
       ],
       classifiers=[
           'Development Status :: 5 - Production/Stable',

@@ -1,20 +1,17 @@
 # pylint: disable=too-few-public-methods
 
-import sys
 import urllib.parse
 
+from base64 import b64encode
 from http import HTTPStatus
 from http.client import HTTPSConnection
 from xmlrpc.client import SafeTransport, Transport, ServerProxy
 
+import gssapi
 import requests
 
 from tcms_api.version import __version__
 
-if sys.platform.startswith("win"):
-    import winkerberos as kerberos  # pylint: disable=import-error
-else:
-    import kerberos  # pylint: disable=import-error
 
 VERBOSE = 0
 
@@ -45,9 +42,8 @@ class SafeCookieTransport(SafeTransport, CookieTransport):
     scheme = 'https'
 
 
-# Taken from FreeIPA source freeipa-1.2.1/ipa-python/krbtransport.py
 class KerbTransport(SafeCookieTransport):
-    """Handles Kerberos Negotiation authentication to an XML-RPC server."""
+    """Handles GSSAPI Negotiation (SPNEGO) authentication."""
 
     def get_host_info(self, host):
         host, extra_headers, x509 = Transport.get_host_info(self, host)
@@ -56,12 +52,12 @@ class KerbTransport(SafeCookieTransport):
         hostinfo = host.split(':')
         service = "HTTP@" + hostinfo[0]
 
-        _result, context = kerberos.authGSSClientInit(service)
-        kerberos.authGSSClientStep(context, "")
+        service_name = gssapi.Name(service, gssapi.NameType.hostbased_service)
+        context = gssapi.SecurityContext(usage="initiate", name=service_name)
+        token = context.step()
 
         extra_headers = [
-            ("Authorization", "Negotiate %s" %
-             kerberos.authGSSClientResponse(context))
+            ("Authorization", "Negotiate %s" % b64encode(token).decode())
         ]
 
         return host, extra_headers, x509
