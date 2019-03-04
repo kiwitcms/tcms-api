@@ -95,7 +95,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
                                           config['tcms']['password'],
                                           config['tcms']['url']).server
         except KeyError:
-            raise Exception("username/password are required in %s" % self._path)
+            raise Exception("username/password required in %s" % self._path)
 
     @property
     def exec(self):

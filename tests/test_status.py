@@ -1,3 +1,5 @@
+# pylint: disable=protected-access
+
 from unittest.mock import MagicMock
 
 from . import PluginTestCase
@@ -7,7 +9,7 @@ class GivenStatusCache(PluginTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.backend._statuses = {'PASSED': 1}  # pylint: disable=protected-access
+        cls.backend._statuses = {'PASSED': 1}
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.TestCaseRunStatus.filter = MagicMock()
 
