@@ -1,0 +1,26 @@
+dist: trusty
+sudo: required
+language: python
+python:
+  - "3.6"
+cache: pip
+env:
+  - MAKE=flake8
+  - MAKE=pylint
+  - MAKE=test
+  - MAKE=build
+
+install:
+  - pip install coverage pylint flake8 twine
+
+script:
+  - make $MAKE
+
+after_success:
+  - |
+        pip install coveralls
+        coveralls
+notifications:
+  email:
+    on_failure: change
+    on_success: never
