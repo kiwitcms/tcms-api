@@ -9,7 +9,7 @@ pylint:
 	                    tcms_api/ tests/
 
 test:
-	python -m unittest -v tests/*.py
+	coverage run --source tcms_api setup.py test
 
 .PHONY: build
 build:
