@@ -4,6 +4,11 @@ Python API for Kiwi TCMS
 .. image:: https://travis-ci.org/kiwitcms/tcms-api.svg?branch=master
     :target: https://travis-ci.org/kiwitcms/tcms-api
 
+.. image:: https://coveralls.io/repos/github/kiwitcms/tcms-api/badge.svg?branch=master
+    :target: https://coveralls.io/github/kiwitcms/tcms-api?branch=master
+    :alt: Code coverage
+
+
 This package allows to connect and access Kiwi TCMS API.
 For more information see
 http://kiwitcms.readthedocs.io/en/latest/api/index.html.
