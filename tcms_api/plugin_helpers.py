@@ -5,7 +5,8 @@ import os
 from . import TCMS
 
 
-class Backend:
+class Backend:  # pylint: disable=too-many-instance-attributes
+
     """
         Facilitates RPC communications with the backend and implements
         behavior described at:
