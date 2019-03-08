@@ -49,7 +49,10 @@ class KerbTransport(SafeCookieTransport):
     """Handles Kerberos Negotiation authentication to an XML-RPC server."""
 
     def get_host_info(self, host):
-        import kerberos
+        try:
+            import winkerberos as kerberos
+        except ImportError:
+            import kerberos
 
         host, extra_headers, x509 = Transport.get_host_info(self, host)
 
