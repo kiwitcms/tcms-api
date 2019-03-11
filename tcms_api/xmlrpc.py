@@ -13,18 +13,19 @@ History:
 
 from http.client import HTTPSConnection
 from http.cookiejar import CookieJar
-from xmlrpc.client import SafeTransport, Transport, ServerProxy
+import xmlrpc.client
+import ssl
 
 VERBOSE = 0
 
 
-class CookieTransport(Transport):
+class CookieTransport(xmlrpc.client.Transport):
     """A subclass of xmlrpc.client.Transport that supports cookies."""
     cookiejar = None
     scheme = 'http'
 
     def __init__(self, use_datetime=False, use_builtin_types=False):
-        super().__init__(use_datetime, use_builtin_types)
+        super().__init__(use_datetime=use_datetime, use_builtin_types=use_builtin_types)
         self._cookies = []
 
     def send_headers(self, connection, headers):
@@ -39,7 +40,7 @@ class CookieTransport(Transport):
         return super().parse_response(response)
 
 
-class SafeCookieTransport(SafeTransport, CookieTransport):
+class SafeCookieTransport(xmlrpc.client.SafeTransport, CookieTransport):
     """SafeTransport subclass that supports cookies."""
     scheme = 'https'
 
@@ -49,12 +50,9 @@ class KerbTransport(SafeCookieTransport):
     """Handles Kerberos Negotiation authentication to an XML-RPC server."""
 
     def get_host_info(self, host):
-        try:
-            import winkerberos as kerberos
-        except ImportError:
-            import kerberos
+        import kerberos
 
-        host, extra_headers, x509 = Transport.get_host_info(self, host)
+        host, extra_headers, x509 = xmlrpc.client.Transport.get_host_info(self, host)
 
         # Set the remote host principal
         hostinfo = host.split(':')
@@ -77,10 +75,9 @@ class KerbTransport(SafeCookieTransport):
         Return an individual HTTPS connection for each request.
         """
         chost, self._extra_headers, x509 = self.get_host_info(host)
-        # Kiwi TCMS isn't ready to use HTTP/1.1 persistent connections,
-        # so tell server current opened HTTP connection should be closed after
-        # request is handled. And there will be a new connection for the next
-        # request.
+        # Kiwi TCMS isn't ready to use HTTP/1.1 persistent connection mechanism.
+        # So tell server current opened HTTP connection should be closed after
+        # request is handled. And there will be a new connection for next request.
         self._extra_headers.append(('Connection', 'close'))
         self._connection = host, HTTPSConnection(  # nosec:B309:blacklist
             chost,
@@ -95,6 +92,7 @@ class TCMSXmlrpc:
     TCMS XML-RPC client for server deployed without BASIC authentication.
     """
     def __init__(self, username, password, url):
+        context = ssl.SSLContext()
         if url.startswith('https://'):
             self._transport = SafeCookieTransport()
         elif url.startswith('http://'):
@@ -103,11 +101,12 @@ class TCMSXmlrpc:
             raise Exception("Unrecognized URL scheme")
 
         self._transport.cookiejar = CookieJar()
-        self.server = ServerProxy(
+        self.server = xmlrpc.client.ServerProxy(
             url,
             transport=self._transport,
             verbose=VERBOSE,
-            allow_none=1
+            allow_none=1,
+            context=ssl._create_unverified_context()
         )
 
         # Login, get a cookie into our cookie jar (login_dict):
@@ -125,13 +124,12 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
             self._transport = KerbTransport()
         elif url.startswith('http://'):
             raise Exception("Encrypted https communication required for "
-                            "Kerberos authentication."
-                            "URL provided: {0}".format(url))
+                            "Kerberos authentication.\nURL provided: {0}".format(url))
         else:
             raise Exception("Unrecognized URL scheme: {0}".format(url))
 
         self._transport.cookiejar = CookieJar()
-        self.server = ServerProxy(
+        self.server = xmlrpc.client.ServerProxy(
             url,
             transport=self._transport,
             verbose=VERBOSE,
