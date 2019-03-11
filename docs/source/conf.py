@@ -11,9 +11,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import os
-import sys
-sys.path.insert(0, os.path.abspath('../../'))
+import subprocess
+
+# generate documentation from Python sources
+subprocess.run(['make', '-C', '../', 'apidoc'], check=True)
 
 
 # -- General configuration ------------------------------------------------

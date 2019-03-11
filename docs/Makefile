@@ -30,7 +30,7 @@ apidoc:
 	$(SPHINXAPIDOC) -o source/modules/ -f -e -M -T ../tcms_api
 
 .PHONY: html
-html: clean apidoc
+html: clean
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."

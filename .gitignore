@@ -6,4 +6,5 @@ dist/
 *.pyc
 *.pyo
 docs/target/
+docs/source/modules/
 .coverage
