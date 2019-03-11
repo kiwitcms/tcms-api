@@ -5,3 +5,5 @@ dist/
 *.egg-info/
 *.pyc
 *.pyo
+docs/target/
+.coverage
