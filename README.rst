@@ -26,6 +26,24 @@ INSTALLATION
     pip install tcms-api
 
 
+CHANGELOG
+---------
+
+v6.7 (10 April 2019)
+~~~~~~~~~~~~~~~~~~~~
+
+This version is compatible only with Kiwi TCMS v6.7 or later!
+For older server versions use tcms-api==5.3!
+
+This version contains breaking changes in ``plugin_helpers``!
+
+- Switch from ``TestCaseRun`` to ``TestExecution`` API. Fixes
+  `Issue #7 <https://github.com/kiwitcms/tcms-api/issues/7>`_
+- Rename ``plugin_helpers.Backend.update_test_case_run()`` to
+  ``plugin_helpers.Backend.update_test_execution()``
+
+
+
 COPYRIGHT
 ---------
 
