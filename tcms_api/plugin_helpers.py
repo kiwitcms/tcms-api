@@ -22,11 +22,11 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
             test_case_id = backend.test_case_get_or_create(<description>)
             backend.add_test_case_to_plan(test_case_id, backend.plan_id)
-            test_case_run_id = backend.add_test_case_to_run(test_case_id,
-                                                            backend.run_id)
-            backend.update_test_case_run(test_case_run_id,
-                                         <status_id>,
-                                         <comment>)
+            test_execution_id = backend.add_test_case_to_run(test_case_id,
+                                                             backend.run_id)
+            backend.update_test_execution(test_execution_id,
+                                          <status_id>,
+                                          <comment>)
 
         :param prefix: Prefix which will be added to TestPlan.name and
                        TestRun.summary
@@ -416,7 +416,10 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
         return self.rpc.TestRun.add_case(run_id, case_id)['case_run_id']
 
-    def update_test_case_run(self, test_case_run_id, status_id, comment=None):
+    def update_test_execution(self,
+                              test_execution_id,
+                              status_id,
+                              comment=None):
         """
             Update TestExecution with a status and comment.
 
@@ -424,8 +427,8 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
                 Test runner plugins **must** call this method!
 
-            :param test_case_run_id: ``tcms.testruns.models.TestExecution`` PK
-            :type test_case_run_id: int
+            :param test_execution_id: ``tcms.testruns.models.TestExecution`` PK
+            :type test_execution_id: int
             :param status_id: ``tcms.testruns.models.TestExecutionStatus`` PK,
                               for example the ID for PASSED, FAILED, etc.
             :type status_id: int
@@ -433,12 +436,12 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             :type comment: str
             :return: None
         """
-        self.rpc.TestExecution.update(test_case_run_id, {'status': status_id})
+        self.rpc.TestExecution.update(test_execution_id, {'status': status_id})
 
         if comment:
-            self.add_comment(test_case_run_id, comment)
+            self.add_comment(test_execution_id, comment)
 
-    def add_comment(self, test_case_run_id, comment):
+    def add_comment(self, test_execution_id, comment):
         """
             Add comment string to TestExecution without changing the status
 
@@ -446,10 +449,10 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
                 Test runner plugins **must** call this method!
 
-            :param test_case_run_id: ``tcms.testruns.models.TestExecution`` PK
-            :type test_case_run_id: int
+            :param test_execution_id: ``tcms.testruns.models.TestExecution`` PK
+            :type test_execution_id: int
             :param comment: the string to add as a comment
             :type comment: str
             :return: None
         """
-        self.rpc.TestExecution.add_comment(test_case_run_id, comment)
+        self.rpc.TestExecution.add_comment(test_execution_id, comment)
