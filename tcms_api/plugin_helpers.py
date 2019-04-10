@@ -87,7 +87,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
     def get_status_id(self, name):
         """
-            Get the PK of ``tcms.testruns.models.TestCaseRunStatus``
+            Get the PK of ``tcms.testruns.models.TestExecutionStatus``
             matching the test execution status.
 
             .. important::
@@ -96,12 +96,12 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
                     id = backend.get_status_id('FAILED')
 
-            :param name: ``tcms.testruns.models.TestCaseRunStatus`` name
+            :param name: ``tcms.testruns.models.TestExecutionStatus`` name
             :type name: str
             :rtype: int
         """
         if name not in self._statuses:
-            self._statuses[name] = self.rpc.TestCaseRunStatus.filter({
+            self._statuses[name] = self.rpc.TestExecutionStatus.filter({
                 'name': name
             })[0]['id']
 
@@ -408,7 +408,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             :type case_id: int
             :param run_id: ``tcms.testruns.models.TestRun`` PK
             :type run_id: int
-            :return: ``tcms.testruns.models.TestCaseRun`` PK
+            :return: ``tcms.testruns.models.TestExecution`` PK
             :rtype: int
         """
         if case_id in self._cases_in_test_run.keys():
@@ -418,38 +418,38 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
     def update_test_case_run(self, test_case_run_id, status_id, comment=None):
         """
-            Update TestCaseRun with a status and comment.
+            Update TestExecution with a status and comment.
 
             .. important::
 
                 Test runner plugins **must** call this method!
 
-            :param test_case_run_id: ``tcms.testruns.models.TestCaseRun`` PK
+            :param test_case_run_id: ``tcms.testruns.models.TestExecution`` PK
             :type test_case_run_id: int
-            :param status_id: ``tcms.testruns.models.TestCaseRunStatus`` PK,
+            :param status_id: ``tcms.testruns.models.TestExecutionStatus`` PK,
                               for example the ID for PASSED, FAILED, etc.
             :type status_id: int
             :param comment: the string to add as a comment, defaults to None
             :type comment: str
             :return: None
         """
-        self.rpc.TestCaseRun.update(test_case_run_id, {'status': status_id})
+        self.rpc.TestExecution.update(test_case_run_id, {'status': status_id})
 
         if comment:
             self.add_comment(test_case_run_id, comment)
 
     def add_comment(self, test_case_run_id, comment):
         """
-            Add comment string to TestCaseRun without changing the status
+            Add comment string to TestExecution without changing the status
 
             .. important::
 
                 Test runner plugins **must** call this method!
 
-            :param test_case_run_id: ``tcms.testruns.models.TestCaseRun`` PK
+            :param test_case_run_id: ``tcms.testruns.models.TestExecution`` PK
             :type test_case_run_id: int
             :param comment: the string to add as a comment
             :type comment: str
             :return: None
         """
-        self.rpc.TestCaseRun.add_comment(test_case_run_id, comment)
+        self.rpc.TestExecution.add_comment(test_case_run_id, comment)
