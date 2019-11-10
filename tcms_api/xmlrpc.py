@@ -15,6 +15,9 @@ from http.client import HTTPSConnection
 from http.cookiejar import CookieJar
 from xmlrpc.client import SafeTransport, Transport, ServerProxy
 
+import kerberos
+
+
 VERBOSE = 0
 
 
@@ -49,8 +52,6 @@ class KerbTransport(SafeCookieTransport):
     """Handles Kerberos Negotiation authentication to an XML-RPC server."""
 
     def get_host_info(self, host):
-        import kerberos
-
         host, extra_headers, x509 = Transport.get_host_info(self, host)
 
         # Set the remote host principal
