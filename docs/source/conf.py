@@ -20,6 +20,7 @@ import subprocess
 # generate documentation from Python sources
 subprocess.run(['make', '-C', '../', 'apidoc'], check=True)
 
+autodoc_mock_imports = ['kerberos']
 
 # -- General configuration ------------------------------------------------
 
