@@ -48,6 +48,15 @@ Connect to backend::
     for test_case in rpc_client.exec.TestCase.filter({'pk': 46490}):
         print(test_case)
 
+.. important::
+
+    For a list of available RPC methods see
+    https://kiwitcms.readthedocs.io/en/latest/modules/tcms.rpc.api.html
+
+    Example(s) and API scripts contributed by the Kiwi TCMS community
+    can be found at https://github.com/kiwitcms/api-scripts. You are welcome
+    to open a pull request with your own examples!
+
 """
 import os
 from configparser import ConfigParser
