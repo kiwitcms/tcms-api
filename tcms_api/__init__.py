@@ -60,6 +60,7 @@ Connect to backend::
 """
 import os
 from configparser import ConfigParser
+from distutils.util import strtobool
 
 from .xmlrpc import TCMSXmlrpc, TCMSKerbXmlrpc
 
@@ -94,7 +95,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
             raise Exception("No url found in %s" % self._path)
         self._parsed = True
 
-        if config['tcms'].get('use_mod_kerb', False):
+        if strtobool(config['tcms'].get('use_mod_kerb', 'False')):
             # use Kerberos
             TCMS._connection = TCMSKerbXmlrpc(config['tcms']['url']).server
 
