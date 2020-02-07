@@ -41,6 +41,15 @@ INSTALLATION
 CHANGELOG
 ---------
 
+v6.7.1 (07 February 2020)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Fix a bug in how ``use_mod_kerb`` setting was evaluated which
+  lead to always preferring Kerberos which in turn was causing
+  issues on Windows.
+
+
+
 v6.7 (10 April 2019)
 ~~~~~~~~~~~~~~~~~~~~
 
