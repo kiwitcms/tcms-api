@@ -375,7 +375,6 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             test_case = [self.rpc.TestCase.create({
                 'summary': summary,
                 'category': self.category_id,
-                'product': self.product_id,
                 'priority': self.priority_id,
                 'case_status': self.confirmed_id,
                 'notes': 'Created by tcms_api.plugin_helpers.Backend',

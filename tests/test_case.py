@@ -27,7 +27,6 @@ class GivenTestCaseDoesNotExistInDatabase(PluginTestCase):
         cls.backend.rpc.TestCase.create = MagicMock(
             return_value={'case_id': 43})
         cls.backend.category_id = 999
-        cls.backend.product_id = 888
         cls.backend.priority_id = 777
         cls.backend.confirmed_id = 666
 
@@ -37,7 +36,6 @@ class GivenTestCaseDoesNotExistInDatabase(PluginTestCase):
         self.backend.rpc.TestCase.create.assert_called_with({
             'summary': 'Automated test case',
             'category': 999,
-            'product': 888,
             'priority': 777,
             'case_status': 666,
             'notes': 'Created by tcms_api.plugin_helpers.Backend',
