@@ -247,7 +247,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             build = [self.rpc.Build.create({'name': build_number,
                                             'product': product_id})]
 
-        return build[0]['build_id'], build_number
+        return build[0]['id'], build_number
 
     def get_plan_type_id(self):
         """
@@ -305,6 +305,10 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                     'type': plan_type_id,
                 })]
 
+            # newly created TP
+            return result[0]['id']
+
+        # TP to which existing TR is assigned
         return result[0]['plan_id']
 
     def get_run_id(self):
@@ -339,12 +343,12 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                 'plan': plan_id,
                 'build': build_id,
             })
-            run_id = testrun['run_id']
+            run_id = testrun['id']
 
         # fetch pre-existing test cases in this TestRun
         # used to avoid adding existing TC to TR later
         for case in self.rpc.TestRun.get_cases(run_id):
-            self._cases_in_test_run[case['case_id']] = case['case_run_id']
+            self._cases_in_test_run[case['id']] = case['execution_id']
 
         return int(run_id)
 
@@ -414,7 +418,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
         if case_id in self._cases_in_test_run.keys():
             return self._cases_in_test_run[case_id]
 
-        return self.rpc.TestRun.add_case(run_id, case_id)['case_run_id']
+        return self.rpc.TestRun.add_case(run_id, case_id)['id']
 
     def update_test_execution(self,
                               test_execution_id,
