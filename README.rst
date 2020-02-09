@@ -42,6 +42,18 @@ CHANGELOG
 ---------
 
 
+
+v8.0.1 (10 February 2020)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This version is compatible only with Kiwi TCMS v8.0 or later!
+
+- Do not use deprecated field ``product`` in ``TestCase.create`` API
+  method
+- Set ``TestCase.is_automated`` to ``True``
+
+
+
 v8.0 (09 February 2020)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
