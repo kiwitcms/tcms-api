@@ -35,9 +35,9 @@ class Given_TCMS_RUN_ID_IsNotPresent(PluginTestCase):
 
         cls.backend.rpc.User.filter = MagicMock(return_value=[{'id': 88}])
 
-        cls.backend.rpc.TestRun.create = MagicMock(return_value={'run_id': 99})
+        cls.backend.rpc.TestRun.create = MagicMock(return_value={'id': 99})
         cls.backend.rpc.TestRun.get_cases = MagicMock(
-            return_value=[{'case_id': 1111, 'case_run_id': 2222}])
+            return_value=[{'id': 1111, 'execution_id': 2222}])
 
     def test_when_get_run_id_then_will_create_TestRun(self):
         with patch.dict(os.environ, {}, True):
