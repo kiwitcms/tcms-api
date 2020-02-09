@@ -39,4 +39,5 @@ class GivenTestCaseDoesNotExistInDatabase(PluginTestCase):
             'priority': 777,
             'case_status': 666,
             'notes': 'Created by tcms_api.plugin_helpers.Backend',
+            'is_automated': True,
         })

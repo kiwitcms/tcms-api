@@ -378,6 +378,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                 'priority': self.priority_id,
                 'case_status': self.confirmed_id,
                 'notes': 'Created by tcms_api.plugin_helpers.Backend',
+                'is_automated': True,
             })]
 
         return test_case[0]
