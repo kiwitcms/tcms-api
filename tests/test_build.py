@@ -11,7 +11,7 @@ class Given_TCMS_BUILD_IsPresent(PluginTestCase):
         super().setUpClass()
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.Build.filter = MagicMock(
-            return_value=[{'build_id': 40}])
+            return_value=[{'id': 40}])
 
     def test_when_get_build_id_then_will_use_it(self):
         with patch.dict(os.environ, {
@@ -30,7 +30,7 @@ class Given_TRAVIS_BUILD_NUMBER_IsPresent(PluginTestCase):
         super().setUpClass()
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.Build.filter = MagicMock(
-            return_value=[{'build_id': 40}])
+            return_value=[{'id': 40}])
 
     def test_when_get_build_id_then_will_use_it(self):
         with patch.dict(os.environ, {
@@ -48,7 +48,7 @@ class Given_BUILD_NUMBER_IsPresent(PluginTestCase):
         super().setUpClass()
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.Build.filter = MagicMock(
-            return_value=[{'build_id': 40}])
+            return_value=[{'id': 40}])
 
     def test_when_get_build_id_then_will_use_it(self):
         with patch.dict(os.environ, {
@@ -73,9 +73,9 @@ class GivenBuildExistsInDatabase(PluginTestCase):
         super().setUpClass()
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.Build.filter = MagicMock(
-            return_value=[{'build_id': 40}])
+            return_value=[{'id': 40}])
         cls.backend.rpc.Build.create = MagicMock(
-            return_value={'build_id': 50})
+            return_value={'id': 50})
 
     def test_when_get_build_id_then_will_reuse_it(self):
         with patch.dict(os.environ, {
@@ -94,7 +94,7 @@ class GivenBuildDoesntExistInDatabase(PluginTestCase):
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.Build.filter = MagicMock(return_value=[])
         cls.backend.rpc.Build.create = MagicMock(
-            return_value={'build_id': 50})
+            return_value={'id': 50})
 
     def test_when_get_build_id_then_will_add_it(self):
         with patch.dict(os.environ, {

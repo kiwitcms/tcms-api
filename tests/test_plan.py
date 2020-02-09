@@ -10,13 +10,13 @@ class GivenRunExistsInDatabase(PluginTestCase):
         super().setUpClass()
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.TestRun.filter = MagicMock(
-            return_value=[{'plan_id': 4}])
+            return_value=[{'id': 4, 'plan_id': 99}])
         cls.backend.rpc.TestPlan.filter = MagicMock()
         cls.backend.rpc.TestPlan.create = MagicMock()
 
     def test_when_get_plan_id_then_will_reuse_TestPlan(self):
         plan_id = self.backend.get_plan_id(0)
-        self.assertEqual(plan_id, 4)
+        self.assertEqual(plan_id, 99)
         self.backend.rpc.TestPlan.filter.assert_not_called()
         self.backend.rpc.TestPlan.create.assert_not_called()
 
@@ -33,7 +33,7 @@ class GivenRunDoesntExistInDatabase(PluginTestCase):
 
     def test_when_get_plan_id_with_existing_TestPlan_then_will_reuse_it(self):
         self.backend.rpc.TestPlan.filter = MagicMock(
-            return_value=[{'plan_id': 400}])
+            return_value=[{'id': 400}])
         self.backend.rpc.TestPlan.create = MagicMock()
 
         plan_id = self.backend.get_plan_id(0)
@@ -43,7 +43,7 @@ class GivenRunDoesntExistInDatabase(PluginTestCase):
     def test_when_get_plan_id_with_non_existing_TP_then_will_create_it(self):
         self.backend.rpc.TestPlan.filter = MagicMock(return_value=[])
         self.backend.rpc.TestPlan.create = MagicMock(
-            return_value={'plan_id': 500})
+            return_value={'id': 500})
 
         plan_id = self.backend.get_plan_id(0)
         self.assertEqual(plan_id, 500)
