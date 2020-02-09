@@ -41,6 +41,17 @@ INSTALLATION
 CHANGELOG
 ---------
 
+
+v8.0 (09 February 2020)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+This version is compatible only with Kiwi TCMS v8.0 or later!
+
+- Adjusts ``plugin_helpers`` module to reflect backwards incompatible
+  API changes introduced in Kiwi TCMS v8.0
+
+
+
 v6.7.1 (07 February 2020)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
