@@ -15,7 +15,10 @@ from http.client import HTTPSConnection
 from http.cookiejar import CookieJar
 from xmlrpc.client import SafeTransport, Transport, ServerProxy
 
-import kerberos
+try:
+    import kerberos
+except ImportError:
+    import winkerberos as kerberos
 
 
 VERBOSE = 0
