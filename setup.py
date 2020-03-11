@@ -2,7 +2,7 @@
 # coding: utf-8
 # pylint: disable=missing-docstring
 from setuptools import setup
-
+import sys
 
 with open("README.rst") as readme:
     LONG_DESCRIPTION = readme.read()
