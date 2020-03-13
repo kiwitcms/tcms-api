@@ -19,7 +19,7 @@ import sys
 if sys.platform.startswith("win"):
     import winkerberos as kerberos
 else:
-    import kerberos    
+    import kerberos
 
 VERBOSE = 0
 
