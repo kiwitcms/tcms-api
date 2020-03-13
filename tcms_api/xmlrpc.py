@@ -14,7 +14,7 @@ History:
 from http.client import HTTPSConnection
 from http.cookiejar import CookieJar
 from xmlrpc.client import SafeTransport, Transport, ServerProxy
-import os
+import sys
 
 if sys.platform.startswith("win") 
     import winkerberos as kerberos
