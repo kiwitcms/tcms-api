@@ -16,9 +16,9 @@ from http.cookiejar import CookieJar
 from xmlrpc.client import SafeTransport, Transport, ServerProxy
 import sys
 
-if sys.platform.startswith("win") 
+if sys.platform.startswith("win"):
     import winkerberos as kerberos
-else
+else:
     import kerberos    
 
 VERBOSE = 0
