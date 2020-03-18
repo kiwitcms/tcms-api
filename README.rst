@@ -4,6 +4,9 @@ Python API for Kiwi TCMS
 .. image:: https://travis-ci.org/kiwitcms/tcms-api.svg?branch=master
     :target: https://travis-ci.org/kiwitcms/tcms-api
 
+.. image:: https://ci.appveyor.com/api/projects/status/jhuyyt9vrpaxagrk?svg=true
+    :target: https://ci.appveyor.com/project/atodorov/tcms-api
+
 .. image:: https://readthedocs.org/projects/tcms-api/badge/?version=latest
     :target: http://tcms-api.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation
