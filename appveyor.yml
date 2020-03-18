@@ -1,0 +1,23 @@
+environment:
+  global:
+    PYTHON: "C:\\Python36-x64"
+
+  matrix:
+    - MAKE: flake8
+    - MAKE: pylint
+    - MAKE: test
+
+install:
+  # Prepend Python to the PATH of this build (this cannot be
+  # done from inside the powershell script as it would require to restart
+  # the parent CMD process).
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+
+  - "python --version"
+  - "python -m pip install --disable-pip-version-check --user --upgrade pip wheel"
+  - "python -m pip install coverage pylint flake8 twine winkerberos"
+
+build: off
+
+test_script:
+  - "C:\\cygwin64\\bin\\make %MAKE%"
