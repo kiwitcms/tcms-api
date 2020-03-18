@@ -17,9 +17,9 @@ from xmlrpc.client import SafeTransport, Transport, ServerProxy
 import sys
 
 if sys.platform.startswith("win"):
-    import winkerberos as kerberos
+    import winkerberos as kerberos  # pylint: disable=import-error
 else:
-    import kerberos
+    import kerberos  # pylint: disable=import-error
 
 VERBOSE = 0
 
