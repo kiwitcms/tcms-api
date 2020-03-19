@@ -5,6 +5,7 @@ RUN dnf -y --setopt=tsflags=nodocs install gcc krb5-devel python3-devel && \
     dnf clean all
 USER 1001
 
+RUN pip install --no-cache-dir -U kiwitcms
 RUN pip install --no-cache-dir social-auth-app-django social-auth-kerberos
 
 COPY ./kiwitcms_kerberos/  /venv/lib64/python3.6/site-packages/kiwitcms_kerberos/
