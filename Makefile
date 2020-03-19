@@ -16,24 +16,17 @@ test:
 build:
 	./tests/check-build
 
-.PHONY: kerberos-image
-kerberos-image:
+.PHONY: build-services
+build-services:
 	docker build -t kiwitcms/kerberos -f tests/krb5/Dockerfile.kerberos tests/krb5/
-
-.PHONY: run-kerberos
-run-kerberos:
-	docker run -d --name krb5_kiwitcms_org kiwitcms/kerberos
-
-.PHONY: kiwitcms-image
-kiwitcms-image:
 	docker build -t kiwitcms/with-kerberos -f tests/krb5/Dockerfile.kiwitcms tests/krb5/
 
-.PHONY: run-kiwitcms
-run-kiwitcms:
-	docker run -d --name web_kiwitcms_org kiwitcms/with-kerberos
-	docker exec -it web_kiwitcms_org /Kiwi/manage.py migrate
-#	docker exec -it web_kiwitcms_org /Kiwi/manage.py createsuperuser
+.PHONY: run-services
+run-services:
+	docker-compose -f tests/krb5/docker-compose.yml up -d
+	docker exec -i web_kiwitcms_org /Kiwi/manage.py migrate
+	docker exec -i web_kiwitcms_org /Kiwi/manage.py createsuperuser --noinput --username super-root --email root@example.com
 	docker cp krb5_kiwitcms_org:/tmp/application.keytab .
 	docker cp ./application.keytab web_kiwitcms_org:/Kiwi/application.keytab
 	rm ./application.keytab
-	docker exec -u 0 -it web_kiwitcms_org /bin/bash -c 'chown 1001:root /Kiwi/application.keytab'
+	docker exec -u 0 -i web_kiwitcms_org /bin/bash -c 'chown 1001:root /Kiwi/application.keytab'
