@@ -1,0 +1,11 @@
+FROM kiwitcms/kiwi
+
+USER 0
+RUN dnf -y --setopt=tsflags=nodocs install gcc krb5-devel python3-devel && \
+    dnf clean all
+USER 1001
+
+RUN pip install --no-cache-dir social-auth-app-django social-auth-kerberos
+
+COPY ./kiwitcms_kerberos/  /venv/lib64/python3.6/site-packages/kiwitcms_kerberos/
+COPY ./kiwitcms_kerberos/kerberos_settings.py /venv/lib64/python3.6/site-packages/tcms_settings_dir/
