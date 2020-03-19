@@ -1,0 +1,52 @@
+name: kerberos
+
+# NOTE: Restricting branches prevents jobs from being doubled since
+# a push to a pull request triggers two events.
+on:
+  pull_request:
+    branches:
+      - "*"
+  push:
+    branches:
+      - "*"
+
+jobs:
+  test-on-linux:
+    name: tcms-api on Linux
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Verify curl with Kerberos
+      run: |
+        make verify-curl-with-kerberos
+
+    - name: Build & start services
+      run: |
+        make build-services
+        make run-services
+
+    - name: Install & configure Kerberos client
+      run: |
+        KRB5_ADDR=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' krb5_kiwitcms_org`
+
+        sudo apt-get -y install krb5-user
+        sudo cp ./tests/krb5/krb5.conf /etc/
+        sudo sed -i "s/localhost\./$KRB5_ADDR/" /etc/krb5.conf
+
+        # this directory is missing and krb5.conf wants to include it
+        sudo mkdir /etc/krb5.conf.d/
+
+        WEB_ADDR=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web_kiwitcms_org`
+        sudo sh -c "echo '$WEB_ADDR    web.kiwitcms.org' >> /etc/hosts"
+
+    - name: Obtain valid Kerberos ticket
+      run: |
+        echo changeme | kinit travis@KIWITCMS.ORG
+        klist
+
+    - name: Verify web login with Kerberos
+      run: |
+        make verify-web-login
+        klist

@@ -30,3 +30,23 @@ run-services:
 	docker cp ./application.keytab web_kiwitcms_org:/Kiwi/application.keytab
 	rm ./application.keytab
 	docker exec -u 0 -i web_kiwitcms_org /bin/bash -c 'chown 1001:root /Kiwi/application.keytab'
+
+.PHONY: verify-curl-with-kerberos
+verify-curl-with-kerberos:
+	# make sure curl supports Negotiate authentication
+	curl -V | egrep -i "GSS-Negotiate|GSS-API|Kerberos"
+
+.PHONY: verify-web-login
+verify-web-login: verify-curl-with-kerberos
+	# grab the page
+	curl -k -L -o /tmp/curl.log --negotiate -u: \
+	     -b /tmp/cookie.jar -c /tmp/cookie.jar \
+	    https://web.kiwitcms.org:8443/login/kerberos/
+
+	# verify user has been logged in
+	cat /tmp/curl.log | grep 'Kiwi TCMS - Dashboard'
+	cat /tmp/curl.log | grep 'Test executions'
+	cat /tmp/curl.log | grep 'Your Test plans'
+
+	# verify username is 'travis', e.g. taken from 'travis@KIWITCMS.ORG' principal
+	cat /tmp/curl.log | grep '<a href="/accounts/travis/profile/" target="_parent">My profile</a>'
