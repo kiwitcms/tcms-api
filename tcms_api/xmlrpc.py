@@ -28,6 +28,7 @@ class CookieTransport(Transport):
 
     def __init__(self, use_datetime=False, use_builtin_types=False):
         super().__init__(use_datetime, use_builtin_types)
+        self.cookiejar = CookieJar()
         self._cookies = []
 
     def send_headers(self, connection, headers):
@@ -100,7 +101,6 @@ class TCMSXmlrpc:
         else:
             raise Exception("Unrecognized URL scheme")
 
-        self._transport.cookiejar = CookieJar()
         self.server = ServerProxy(
             url,
             transport=self._transport,
@@ -128,7 +128,6 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
         else:
             raise Exception("Unrecognized URL scheme: {0}".format(url))
 
-        self._transport.cookiejar = CookieJar()
         self.server = ServerProxy(
             url,
             transport=self._transport,
