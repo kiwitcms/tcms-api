@@ -1,0 +1,4 @@
+add_entry -password -p HTTP/web.kiwitcms.org -k 0 -e aes256-cts-hmac-sha1-96
+changeme
+write_kt /tmp/application.keytab
+quit

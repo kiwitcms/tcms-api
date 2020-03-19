@@ -15,3 +15,11 @@ test:
 .PHONY: build
 build:
 	./tests/check-build
+
+.PHONY: kerberos-image
+kerberos-image:
+	docker build -t kiwitcms/kerberos -f tests/krb5/Dockerfile.kerberos tests/krb5/
+
+.PHONY: run-kerberos
+run-kerberos:
+	docker run -d --name krb5_kiwitcms_org kiwitcms/kerberos

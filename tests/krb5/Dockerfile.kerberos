@@ -1,0 +1,16 @@
+FROM centos:centos8
+
+EXPOSE 88
+
+COPY ./krb5.conf /etc/
+COPY ./ktutil.instructions /tmp/
+
+RUN dnf -y --setopt=tsflags=nodocs install krb5-server krb5-workstation  && \
+    sed -i "s/EXAMPLE.COM/KIWITCMS.ORG/g" /var/kerberos/krb5kdc/kdc.conf && \
+    sed -i "s/@EXAMPLE.COM//" /var/kerberos/krb5kdc/kadm5.acl            && \
+    /usr/sbin/kdb5_util -P changeme create -s                            && \
+    /usr/sbin/kadmin.local -q "add_principal -pw changeme travis"        && \
+    /usr/sbin/kadmin.local -q "add_principal -pw changeme HTTP/web.kiwitcms.org" && \
+    cat /tmp/ktutil.instructions | /usr/bin/ktutil
+
+CMD /usr/sbin/krb5kdc -n
