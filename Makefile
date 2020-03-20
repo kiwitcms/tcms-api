@@ -24,12 +24,17 @@ build-services:
 .PHONY: run-services
 run-services:
 	docker-compose -f tests/krb5/docker-compose.yml up -d
-	docker exec -i web_kiwitcms_org /Kiwi/manage.py migrate
-	docker exec -i web_kiwitcms_org /Kiwi/manage.py createsuperuser --noinput --username super-root --email root@example.com
 	docker cp krb5_kiwitcms_org:/tmp/application.keytab .
 	docker cp ./application.keytab web_kiwitcms_org:/Kiwi/application.keytab
 	rm ./application.keytab
 	docker exec -u 0 -i web_kiwitcms_org /bin/bash -c 'chown 1001:root /Kiwi/application.keytab'
+	docker exec -i web_kiwitcms_org /Kiwi/manage.py migrate
+	docker exec -i web_kiwitcms_org /Kiwi/manage.py createsuperuser --noinput --username super-root --email root@example.com
+	echo "from tcms.management.models import *; Classification.objects.create(name='test-products')" | docker exec -i web_kiwitcms_org /Kiwi/manage.py shell
+
+.PHONY: verify-integration
+verify-integration:
+	PYTHONPATH=. python -m coverage run --source tcms_api ./tests/krb5/integration_test.py
 
 .PHONY: verify-curl-with-kerberos
 verify-curl-with-kerberos:
