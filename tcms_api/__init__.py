@@ -36,7 +36,7 @@ Minimal config file ``~/.tcms.conf``::
     username = your-username
     password = your-password
 
-For Kerberos specify ``use_mod_kerb = True`` key!
+For Kerberos specify ``use_kerberos = True`` key!
 It's also possible to provide system-wide config in ``/etc/tcms.conf``.
 
 Connect to backend::
@@ -94,7 +94,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
         except (KeyError, AttributeError):
             raise Exception("No url found in %s" % self._path)
 
-        if strtobool(config['tcms'].get('use_mod_kerb', 'False')):
+        if strtobool(config['tcms'].get('use_kerberos', 'False')):
             # use Kerberos
             TCMS._connection = TCMSKerbXmlrpc(config['tcms']['url']).server
 
