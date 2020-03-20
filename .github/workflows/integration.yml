@@ -1,4 +1,4 @@
-name: kerberos
+name: integration test
 
 # NOTE: Restricting branches prevents jobs from being doubled since
 # a push to a pull request triggers two events.
@@ -12,13 +12,18 @@ on:
 
 jobs:
   test-on-linux:
-    name: tcms-api on Linux
-    runs-on: ubuntu-latest
+    name: Py${{ matrix.python-version }} @ ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
+        # note: always use the -latest OS variants b/c if conditions
+        # match them as literals
+        os: [ubuntu-latest]
         python-version: [3.6]
 
     steps:
+
     - name: Check out code
       uses: actions/checkout@v2
 
@@ -31,10 +36,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install Python dependencies
+    - name: Install Python dependencies on Linux
+      if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get install libkrb5-dev
-        pip install coverage kerberos requests
+        pip install kerberos requests
 
     - name: Build & start services
       run: |
@@ -42,6 +48,7 @@ jobs:
         make run-services
 
     - name: Install & configure Kerberos client
+      if: matrix.os == 'ubuntu-latest'
       run: |
         KRB5_ADDR=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' krb5_kiwitcms_org`
 
@@ -64,6 +71,10 @@ jobs:
       run: |
         make verify-web-login
         klist
+
+    - name: Install coverage tools
+      run: |
+        pip install coverage codecov
 
     - name: Verify tcms-api can communicate via username/password
       run: |
