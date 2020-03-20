@@ -30,7 +30,7 @@ run-services:
 	docker exec -u 0 -i web_kiwitcms_org /bin/bash -c 'chown 1001:root /Kiwi/application.keytab'
 	docker exec -i web_kiwitcms_org /Kiwi/manage.py migrate
 	docker exec -i web_kiwitcms_org /Kiwi/manage.py createsuperuser --noinput --username super-root --email root@example.com
-	echo "from tcms.management.models import *; Classification.objects.create(name='test-products')" | docker exec -i web_kiwitcms_org /Kiwi/manage.py shell
+	cat tests/krb5/kiwitcms_kerberos/db_init.py | docker exec -i web_kiwitcms_org /Kiwi/manage.py shell
 
 .PHONY: verify-integration
 verify-integration:

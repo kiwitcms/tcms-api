@@ -65,6 +65,17 @@ jobs:
         make verify-web-login
         klist
 
+    - name: Verify tcms-api can communicate via username/password
+      run: |
+        cat > ~/.tcms.conf << _EOF_
+        [tcms]
+        url = https://web.kiwitcms.org:8443/xml-rpc/
+        username = kiwitcms-bot
+        password = changeme
+        _EOF_
+
+        make verify-integration
+
     - name: Verify tcms-api can communicate over Kerberos
       run: |
         cat > ~/.tcms.conf << _EOF_
