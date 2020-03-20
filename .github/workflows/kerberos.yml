@@ -64,3 +64,13 @@ jobs:
       run: |
         make verify-web-login
         klist
+
+    - name: Verify tcms-api can communicate over Kerberos
+      run: |
+        cat > ~/.tcms.conf << _EOF_
+        [tcms]
+        url = https://web.kiwitcms.org:8443/xml-rpc/
+        use_kerberos = True
+        _EOF_
+
+        make verify-integration
