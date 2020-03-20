@@ -4,7 +4,7 @@
 #   Copyright (c) 2012 Red Hat, Inc. All rights reserved.
 #   Author: Petr Splichal <psplicha@redhat.com>
 #
-#   Copyright (c) 2018 Kiwi TCMS project. All rights reserved.
+#   Copyright (c) 2018,2020 Kiwi TCMS project. All rights reserved.
 #   Author: Alexander Todorov <info@kiwitcms.org>
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,7 +93,6 @@ class TCMS:  # pylint: disable=too-few-public-methods
             config['tcms']['url'] is not None
         except (KeyError, AttributeError):
             raise Exception("No url found in %s" % self._path)
-        self._parsed = True
 
         if strtobool(config['tcms'].get('use_mod_kerb', 'False')):
             # use Kerberos
