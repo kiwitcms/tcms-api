@@ -34,7 +34,7 @@ jobs:
     - name: Install Python dependencies
       run: |
         sudo apt-get install libkrb5-dev
-        pip install coverage kerberos
+        pip install coverage kerberos requests
 
     - name: Build & start services
       run: |
