@@ -7,9 +7,11 @@
 
 import ssl
 import unittest
+from unittest.mock import patch
 
 from datetime import datetime
 
+import requests
 from tcms_api import TCMS
 
 
@@ -23,10 +25,18 @@ else:
     ssl._create_default_https_context = _create_unverified_https_context
 
 
+class DoNotVerifySSLSession(requests.sessions.Session):
+    def get(self, url, **kwargs):
+        kwargs.setdefault('verify', False)
+        return super().get(url, **kwargs)
+
+
 class IntegrationTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.rpc = TCMS().exec
+        with patch('requests.sessions.Session') as session:
+            session.return_value = DoNotVerifySSLSession()
+            cls.rpc = TCMS().exec
 
     def test_readonly_filtering_works(self):
         results = self.rpc.User.filter()

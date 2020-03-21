@@ -11,10 +11,14 @@ History:
 """
 # pylint: disable=too-few-public-methods
 
+from http import HTTPStatus
 from http.client import HTTPSConnection
 from http.cookiejar import CookieJar
+import urllib.parse
 from xmlrpc.client import SafeTransport, Transport, ServerProxy
 import sys
+
+import requests
 
 if sys.platform.startswith("win"):
     import winkerberos as kerberos  # pylint: disable=import-error
@@ -92,6 +96,18 @@ class KerbTransport(SafeCookieTransport):
         return self._connection[1]
 
 
+def get_hostname(url):
+    """
+        Performs the same parsing of the URL as the Transport
+        class and returns only the hostname which is used to
+        generate the service principal name for Kiwi TCMS and
+        the respective Authorize header!
+    """
+    _type, uri = urllib.parse.splittype(url)
+    hostname, _path = urllib.parse.splithost(uri)
+    return hostname
+
+
 class TCMSXmlrpc:
     """
     TCMS XML-RPC client for server deployed without BASIC authentication.
@@ -120,6 +136,7 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
     TCMSXmlrpc - TCMS XML-RPC client
                     for server deployed with mod_auth_kerb
     """
+    session_cookie_name = 'sessionid'
 
     def __init__(self, url):  # pylint: disable=super-init-not-called
         if url.startswith('https://'):
@@ -139,4 +156,21 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
         )
 
         # Login, get a cookie into our cookie jar (login_dict):
-        self.server.Auth.login_krbv()
+        self.login(url)
+
+    def login(self, url):
+        url = url.replace('xml-rpc', 'login/kerberos')
+        hostname = get_hostname(url)
+
+        _, headers, _ = self._transport.get_host_info(hostname)
+        # transport returns list of tuples but requests needs a dictionary
+        headers = dict(headers)
+
+        # note: by default will follow redirects
+        with requests.sessions.Session() as session:
+            response = session.get(url, headers=headers)
+            assert response.status_code == HTTPStatus.OK
+            self._transport._cookies.append(  # pylint: disable=protected-access
+                self.session_cookie_name + '=' +
+                session.cookies[self.session_cookie_name]
+            )
