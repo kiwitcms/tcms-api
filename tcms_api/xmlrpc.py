@@ -66,7 +66,7 @@ class KerbTransport(SafeCookieTransport):
         kerberos.authGSSClientStep(context, "")
 
         extra_headers = [
-            ("Authorization", "negotiate %s" %
+            ("Authorization", "Negotiate %s" %
              kerberos.authGSSClientResponse(context))
         ]
 
