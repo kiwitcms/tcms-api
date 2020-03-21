@@ -36,7 +36,14 @@ Minimal config file ``~/.tcms.conf``::
     username = your-username
     password = your-password
 
-For Kerberos specify ``use_kerberos = True`` key!
+For Kerberos specify the ``use_kerberos = True`` key without username
+and password! Also make sure that your ``/etc/krb5.conf`` contains::
+
+    [libdefaults]
+    default_realm = .EXAMPLE.COM
+
+where ``EXAMPLE.COM`` matches the realm in your organization.
+
 It's also possible to provide system-wide config in ``/etc/tcms.conf``.
 
 Connect to backend::
