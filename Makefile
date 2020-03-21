@@ -31,6 +31,11 @@ run-services:
 	docker exec -i web_kiwitcms_org /Kiwi/manage.py migrate
 	docker exec -i web_kiwitcms_org /Kiwi/manage.py createsuperuser --noinput --username super-root --email root@example.com
 	cat tests/krb5/kiwitcms_kerberos/db_init.py | docker exec -i web_kiwitcms_org /Kiwi/manage.py shell
+	@echo "=== add the following to client's /etc/hosts & /etc/krb5.conf ==="
+	@echo "--- web.kiwitcms.org ---"
+	@docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web_kiwitcms_org
+	@echo "--- krb5.kiwitcms.org ---"
+	@docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' krb5_kiwitcms_org
 
 .PHONY: verify-integration
 verify-integration:
