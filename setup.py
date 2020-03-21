@@ -21,6 +21,7 @@ setup(name='tcms-api',
       url='https://github.com/kiwitcms/tcms-api',
       python_requires='>=3.6',
       install_requires=(
+          ['requests'] +
           ["winkerberos"] if sys.platform.startswith("win") else ["kerberos"]
       ),
       classifiers=[
