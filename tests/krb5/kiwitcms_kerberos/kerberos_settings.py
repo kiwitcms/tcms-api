@@ -9,6 +9,9 @@ DATABASES = {
     }
 }
 
+if 'kiwitcms_kerberos' not in INSTALLED_APPS:   # noqa: F821
+    INSTALLED_APPS.append('kiwitcms_kerberos')  # noqa: F821
+
 if 'social_django' not in INSTALLED_APPS:   # noqa: F821
     INSTALLED_APPS.append('social_django')  # noqa: F821
 
@@ -29,6 +32,7 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
+    'kiwitcms_kerberos.pipeline.initiate_defaults',
 ]
 
 AUTHENTICATION_BACKENDS = [
