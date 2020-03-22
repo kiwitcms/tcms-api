@@ -17,12 +17,13 @@ import subprocess
 
 sys.path.insert(0, os.path.abspath('../../'))
 
-from tcms_api.version import __version__
-
 # generate documentation from Python sources
 subprocess.run(['make', '-C', '../', 'apidoc'], check=True)
 
 autodoc_mock_imports = ['kerberos']
+
+# keep this after mock_imports b/c otherwise will fail
+from tcms_api.version import __version__
 
 # -- General configuration ------------------------------------------------
 
