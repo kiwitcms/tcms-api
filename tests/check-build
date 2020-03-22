@@ -30,7 +30,10 @@ if [ "$matched_files" -gt "0" ]; then
     echo "ERROR: .pyc files found in .tar.gz package"
     exit 1
 fi
-matched_files=`unzip -t dist/tcms_api*.whl | grep -c "\.pyc"`
+WHEEL_UNPACK_DIR=`mktemp -d`
+wheel unpack --dest "$WHEEL_UNPACK_DIR" dist/tcms_api*.whl
+matched_files=`find "$WHEEL_UNPACK_DIR" -type f | grep -c "\.pyc"`
+rm -rf "$WHEEL_UNPACK_DIR"
 if [ "$matched_files" -gt "0" ]; then
     echo "ERROR: .pyc files found in wheel package"
     exit 1
