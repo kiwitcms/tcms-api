@@ -6,12 +6,13 @@ environment:
     - MAKE: flake8
     - MAKE: pylint
     - MAKE: test
+    - MAKE: build
 
 install:
-  # Prepend Python to the PATH of this build (this cannot be
-  # done from inside the powershell script as it would require to restart
-  # the parent CMD process).
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  # Prepend Python to the PATH of this build (this cannot be done from inside
+  # the powershell script as it would require to restart the parent CMD process).
+  # cygwin64\bin contains all commands used by 'make build'
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;C:\\Users\\appveyor\\AppData\\Roaming\\Python\\Python36\\Scripts;C:\\cygwin64\\bin;%PATH%"
 
   - "python --version"
   - "python -m pip install --disable-pip-version-check --user --upgrade pip wheel"
@@ -19,5 +20,13 @@ install:
 
 build: off
 
+artifacts:
+  - path: 'dist\*.whl'
+    name: Python wheel for Windows
+    type: file
+
 test_script:
-  - "C:\\cygwin64\\bin\\make %MAKE%"
+  - 'sed -i "s|-p \$(which python)||" tests/check-build'
+  - 'sed -i "s|bin/activate|Scripts/activate|" tests/check-build'
+  - 'sed -i "s|pip install kerberos||" tests/check-build'
+  - "make %MAKE%"
