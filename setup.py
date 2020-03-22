@@ -1,8 +1,14 @@
 #!/usr/bin/env python
-# coding: utf-8
-# pylint: disable=missing-docstring
-from setuptools import setup
+import os
 import sys
+from setuptools import setup
+
+
+def get_version():
+    version = open(os.path.join('tcms_api', 'version.py')).read()
+    return version.replace(
+        ' ', ''
+    ).replace('__version__=', '').strip().strip("'").strip('"')
 
 
 with open("README.rst") as readme:
@@ -11,7 +17,7 @@ with open("README.rst") as readme:
 
 setup(name='tcms-api',
       # always update version/release in docs/conf.py
-      version='8.0.1',
+      version=get_version(),
       packages=['tcms_api'],
       description='Python API for Kiwi',
       long_description=LONG_DESCRIPTION,

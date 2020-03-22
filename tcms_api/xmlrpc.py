@@ -1,12 +1,15 @@
 # pylint: disable=too-few-public-methods
 
+import sys
+import urllib.parse
+
 from http import HTTPStatus
 from http.client import HTTPSConnection
-import urllib.parse
 from xmlrpc.client import SafeTransport, Transport, ServerProxy
-import sys
 
 import requests
+
+from tcms_api.version import __version__
 
 if sys.platform.startswith("win"):
     import winkerberos as kerberos  # pylint: disable=import-error
@@ -19,6 +22,7 @@ VERBOSE = 0
 class CookieTransport(Transport):
     """A subclass of xmlrpc.client.Transport that supports cookies."""
     scheme = 'http'
+    user_agent = 'tcms-api/%s' % __version__
 
     def __init__(self, use_datetime=False, use_builtin_types=False):
         super().__init__(use_datetime, use_builtin_types)
@@ -149,6 +153,7 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
         _, headers, _ = self.transport.get_host_info(hostname)
         # transport returns list of tuples but requests needs a dictionary
         headers = dict(headers)
+        headers['User-Agent'] = self.transport.user_agent
 
         # note: by default will follow redirects
         with requests.sessions.Session() as session:

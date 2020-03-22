@@ -69,7 +69,7 @@ import os
 from configparser import ConfigParser
 from distutils.util import strtobool
 
-from .xmlrpc import TCMSXmlrpc, TCMSKerbXmlrpc
+from tcms_api.xmlrpc import TCMSXmlrpc, TCMSKerbXmlrpc
 
 
 class TCMS:  # pylint: disable=too-few-public-methods
