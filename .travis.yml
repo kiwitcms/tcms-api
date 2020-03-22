@@ -11,7 +11,7 @@ env:
   - MAKE=build
 
 install:
-  - pip install codecov pylint flake8 twine kerberos requests
+  - pip install -r devel.txt
 
 script:
   - make $MAKE
