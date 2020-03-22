@@ -13,11 +13,9 @@
 
 import os
 import sys
-import subprocess
-
 sys.path.insert(0, os.path.abspath('../../'))
 
-from tcms_api.version import __version__
+import subprocess
 
 # generate documentation from Python sources
 subprocess.run(['make', '-C', '../', 'apidoc'], check=True)
@@ -52,16 +50,16 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'tcms-api'
-copyright = u'2019-2020 Kiwi TCMS project and its contributors'
+copyright = u'2019 Kiwi TCMS project and its contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = __version__
+version = '5.3'
 # The full version, including alpha/beta/rc tags.
-release = __version__
+release = '5.3.0'
 
 exclude_patterns = []
 
