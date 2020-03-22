@@ -26,10 +26,10 @@ setup(name='tcms-api',
       license='LGPLv2+',
       url='https://github.com/kiwitcms/tcms-api',
       python_requires='>=3.6',
-      install_requires=(
-          ['requests'] +
-          ["winkerberos"] if sys.platform.startswith("win") else ["kerberos"]
-      ),
+      install_requires=[
+          'requests',
+          'winkerberos' if sys.platform.startswith("win") else 'kerberos',
+      ],
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Environment :: Console',
