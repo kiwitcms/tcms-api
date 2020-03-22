@@ -16,7 +16,6 @@ with open("README.rst") as readme:
 
 
 setup(name='tcms-api',
-      # always update version/release in docs/conf.py
       version=get_version(),
       packages=['tcms_api'],
       description='Python API for Kiwi',
