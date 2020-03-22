@@ -10,12 +10,22 @@ def get_version():
     ).replace('__version__=', '').strip().strip("'").strip('"')
 
 
+def get_install_requires(path):
+    requires = []
+
+    with open(path, 'r') as file:
+        for line in file:
+            if line.startswith('-r '):
+                continue
+            requires.append(line.strip())
+        return requires
+
+
 with open("README.rst") as readme:
     LONG_DESCRIPTION = readme.read()
 
 
 setup(name='tcms-api',
-      # always update version/release in docs/conf.py
       version=get_version(),
       packages=['tcms_api'],
       description='Python API for Kiwi',
@@ -26,10 +36,7 @@ setup(name='tcms-api',
       license='LGPLv2+',
       url='https://github.com/kiwitcms/tcms-api',
       python_requires='>=3.6',
-      install_requires=[
-          'requests',
-          'gssapi',
-      ],
+      install_requires=get_install_requires('requirements.txt'),
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Environment :: Console',

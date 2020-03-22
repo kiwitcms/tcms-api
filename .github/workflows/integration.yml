@@ -40,7 +40,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get install libkrb5-dev
-        pip install kerberos requests
+        pip install -r devel.txt
 
     - name: Build & start services
       run: |
@@ -71,10 +71,6 @@ jobs:
       run: |
         make verify-web-login
         klist
-
-    - name: Install coverage tools
-      run: |
-        pip install codecov
 
     - name: Verify tcms-api can communicate via username/password
       run: |
