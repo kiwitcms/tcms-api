@@ -103,7 +103,8 @@ class TCMS:  # pylint: disable=too-few-public-methods
 
         if strtobool(config['tcms'].get('use_kerberos', 'False')):
             # use Kerberos
-            TCMS._connection = TCMSKerbXmlrpc(config['tcms']['url']).server
+            TCMS._connection = TCMSKerbXmlrpc(None, None,
+                                              config['tcms']['url']).server
             return
 
         try:
