@@ -1,14 +1,3 @@
-"""
-XMLRPC driver
-
-Use this class to access Kiwi TCMS via XML-RPC
-This code is based on
-http://landfill.bugzilla.org/testopia2/testopia/contrib/drivers/python/testopia.py
-and https://fedorahosted.org/python-bugzilla/browser/bugzilla/base.py
-
-History:
-2011-12-31 bugfix https://bugzilla.redhat.com/show_bug.cgi?id=735937
-"""
 # pylint: disable=too-few-public-methods
 
 from http import HTTPStatus
@@ -75,9 +64,9 @@ class KerbTransport(SafeCookieTransport):
 
     def make_connection(self, host):
         """
-        For fixing https://bugzilla.redhat.com/show_bug.cgi?id=735937
+            Return an individual HTTPS connection for each request.
 
-        Return an individual HTTPS connection for each request.
+            Fix https://bugzilla.redhat.com/show_bug.cgi?id=735937
         """
         chost, self._extra_headers, x509 = self.get_host_info(host)
         # Kiwi TCMS isn't ready to use HTTP/1.1 persistent connections,
@@ -107,15 +96,19 @@ def get_hostname(url):
 
 class TCMSXmlrpc:
     """
-    TCMS XML-RPC client for server deployed without BASIC authentication.
+        XML-RPC client for username/password authentication.
     """
+    session_cookie_name = 'sessionid'
+    transport = None
+
     def __init__(self, username, password, url):
-        if url.startswith('https://'):
-            self.transport = SafeCookieTransport()
-        elif url.startswith('http://'):
-            self.transport = CookieTransport()
-        else:
-            raise Exception("Unrecognized URL scheme")
+        if self.transport is None:
+            if url.startswith('https://'):
+                self.transport = SafeCookieTransport()
+            elif url.startswith('http://'):
+                self.transport = CookieTransport()
+            else:
+                raise Exception("Unrecognized URL scheme")
 
         self.server = ServerProxy(
             url,
@@ -124,38 +117,32 @@ class TCMSXmlrpc:
             allow_none=1
         )
 
-        # Login, get a cookie into our cookie jar (login_dict):
+        self.login(username, password, url)
+
+    def login(
+            self, username, password, url):  # pylint: disable=unused-argument
+        """
+            Login in the web app to save a session cookie in the cookie jar!
+        """
         self.server.Auth.login(username, password)
 
 
 class TCMSKerbXmlrpc(TCMSXmlrpc):
     """
-    TCMSXmlrpc - TCMS XML-RPC client
-                    for server deployed with mod_auth_kerb
+        XML-RPC client for server deployed with python-social-auth-kerberos.
+
+        Should also work for servers deployed with mod_auth_gssapi but
+        that is not supported nor guaranteed!
     """
-    session_cookie_name = 'sessionid'
+    transport = KerbTransport()
 
-    def __init__(self, url):  # pylint: disable=super-init-not-called
-        if url.startswith('https://'):
-            self.transport = KerbTransport()
-        elif url.startswith('http://'):
-            raise Exception("Encrypted https communication required for "
-                            "Kerberos authentication."
-                            "URL provided: {0}".format(url))
-        else:
-            raise Exception("Unrecognized URL scheme: {0}".format(url))
+    def __init__(self, username, password, url):
+        if not url.startswith('https://'):
+            raise Exception("https:// required for GSSAPI authentication."
+                            "URL provided: %s" % url)
+        super().__init__(username, password, url)
 
-        self.server = ServerProxy(
-            url,
-            transport=self.transport,
-            verbose=VERBOSE,
-            allow_none=1
-        )
-
-        # Login, get a cookie into our cookie jar (login_dict):
-        self.login(url)
-
-    def login(self, url):
+    def login(self, username, password, url):
         url = url.replace('xml-rpc', 'login/kerberos')
         hostname = get_hostname(url)
 
