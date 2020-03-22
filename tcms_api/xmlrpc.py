@@ -13,7 +13,6 @@ History:
 
 from http import HTTPStatus
 from http.client import HTTPSConnection
-from http.cookiejar import CookieJar
 import urllib.parse
 from xmlrpc.client import SafeTransport, Transport, ServerProxy
 import sys
@@ -30,12 +29,10 @@ VERBOSE = 0
 
 class CookieTransport(Transport):
     """A subclass of xmlrpc.client.Transport that supports cookies."""
-    cookiejar = None
     scheme = 'http'
 
     def __init__(self, use_datetime=False, use_builtin_types=False):
         super().__init__(use_datetime, use_builtin_types)
-        self.cookiejar = CookieJar()
         self._cookies = []
 
     def send_headers(self, connection, headers):
