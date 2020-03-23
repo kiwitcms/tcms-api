@@ -45,6 +45,22 @@ CHANGELOG
 ---------
 
 
+v8.1 (23 March 2020)
+~~~~~~~~~~~~~~~~~~~~
+
+- Use ``winkerberos`` dependency on Microsoft Windows platform
+  (@mtg-edmund-tse)
+- Setting rename in config file: ``use_mod_kerb`` -> ``use_kerberos``
+- Bug-fix: don't fall back to user/pass if kerberos is configured
+- Bug-fix: send correctly formatted authorization request header,
+  per RFC-4459
+- Bug-fix: properly authenticate with Kiwi TCMS via kerberos ticket
+  if requested to do so
+- Start sending ``User-Agent: tcms-api/<version>`` for all requests
+- Enable integration testing with and without Kerberos
+- Enable testing on Windows
+
+
 
 v8.0.1 (10 February 2020)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
