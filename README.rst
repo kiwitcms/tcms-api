@@ -45,8 +45,8 @@ CHANGELOG
 ---------
 
 
-v8.1 (23 March 2020)
-~~~~~~~~~~~~~~~~~~~~
+v8.1.1 (23 March 2020)
+~~~~~~~~~~~~~~~~~~~~~~
 
 - Use ``winkerberos`` dependency on Microsoft Windows platform
   (@mtg-edmund-tse)
