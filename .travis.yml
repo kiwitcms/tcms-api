@@ -7,19 +7,15 @@ cache: pip
 env:
   - MAKE=flake8
   - MAKE=pylint
-  - MAKE=test
+  - MAKE=test-codecov
   - MAKE=build
 
 install:
-  - pip install coverage pylint flake8 twine kerberos requests
+  - pip install codecov pylint flake8 twine kerberos requests
 
 script:
   - make $MAKE
 
-after_success:
-  - |
-        pip install coveralls
-        coveralls
 notifications:
   email:
     on_failure: change
