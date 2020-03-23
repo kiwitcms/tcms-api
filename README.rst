@@ -11,8 +11,8 @@ Python API for Kiwi TCMS
     :target: http://tcms-api.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation
 
-.. image:: https://coveralls.io/repos/github/kiwitcms/tcms-api/badge.svg?branch=master
-    :target: https://coveralls.io/github/kiwitcms/tcms-api?branch=master
+.. image:: https://codecov.io/gh/kiwitcms/tcms-api/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/kiwitcms/tcms-api
     :alt: Code coverage
 
 .. image:: https://tidelift.com/badges/package/pypi/tcms-api

@@ -12,6 +12,10 @@ pylint:
 test:
 	python -m coverage run --source tcms_api setup.py test
 
+.PHONY: test-codecov
+test-codecov: test
+	codecov
+
 .PHONY: build
 build:
 	./tests/check-build

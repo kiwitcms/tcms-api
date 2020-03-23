@@ -74,7 +74,7 @@ jobs:
 
     - name: Install coverage tools
       run: |
-        pip install coverage codecov
+        pip install codecov
 
     - name: Verify tcms-api can communicate via username/password
       run: |
@@ -96,3 +96,7 @@ jobs:
         _EOF_
 
         make verify-integration
+
+    - name: Submit coverage report
+      run: |
+        codecov --token=cf379ef9-76c2-4aa9-9bf5-5c01303222e0
