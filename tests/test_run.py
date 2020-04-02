@@ -34,7 +34,8 @@ class Given_TCMS_RUN_ID_IsNotPresent(PluginTestCase):
         cls.backend.get_plan_id = MagicMock(return_value=77)
 
         cls.backend.rpc.User.filter = MagicMock(return_value=[{'id': 88}])
-
+        cls.backend.rpc.TestPlan.filter = MagicMock(
+            return_value=[{'author_id': 88}])
         cls.backend.rpc.TestRun.create = MagicMock(return_value={'id': 99})
         cls.backend.rpc.TestRun.get_cases = MagicMock(
             return_value=[{'id': 1111, 'execution_id': 2222}])
