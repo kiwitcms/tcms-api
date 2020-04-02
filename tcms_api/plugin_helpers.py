@@ -266,6 +266,20 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
         return plan_type[0]['id']
 
+    def external_plan_id(self):  # pylint: disable=no-self-use
+        """
+            Allows the user to specify `$TCMS_PLAN_ID` to point to an existing
+            TestPlan where new runs will be added!
+
+            .. warning::
+
+                Does not check if the specified TP exists!
+
+            :return: ``tcms.testplans.models.TestPlan`` PK or 0
+            :rtype: int
+        """
+        return os.environ.get('TCMS_PLAN_ID', 0)
+
     def get_plan_id(self, run_id):
         """
             If a TestRun with PK `run_id` exists then return the TestPlan to
@@ -281,6 +295,10 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             :return: ``tcms.testplans.models.TestPlan`` PK
             :rtype: int
         """
+        plan_id = self.external_plan_id()
+        if plan_id:
+            return plan_id
+
         result = self.rpc.TestRun.filter({'pk': run_id})
         if not result:
             product_id, product_name = self.get_product_id(0)
