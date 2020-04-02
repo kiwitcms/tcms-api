@@ -44,6 +44,26 @@ INSTALLATION
 CHANGELOG
 ---------
 
+v8.2.0 (02 April 2020)
+~~~~~~~~~~~~~~~~~~~~~~
+
+This version adds additional methods and functionality that can be used
+by Kiwi TCMS plugins written in Python.
+
+- Modify ``plugin_helpers.Backend.test_case_get_or_create()`` to return
+  tuple (dict, bool). WARNING: this will break existing plugins
+- ``plugin_helpers.Backend`` will use ``TCMS_PLAN_ID`` environment variable
+  if specified. This allows the user to select an existing TestPlan to save
+  new results into. Fixes
+  `Issue #5 <https://github.com/kiwitcms/tcms-api/issues/5>`_
+- Add ``plugin_helpers.Backend.finish_test_run()`` which may be
+  called by plugins to indicate that a TestRun has been finished
+- Add ``plugin_helpers.Backend.default_tester_id()`` and update
+  ``TestExecution.tested_by`` when changing status
+- Use ``default_tester_id()`` when creating a new TestRun
+- When creating new test run always set TR.manager := TP.author
+  and make sure that ``TestPlan.create()`` will also specify author
+
 
 v8.1.1 (23 March 2020)
 ~~~~~~~~~~~~~~~~~~~~~~
