@@ -13,8 +13,10 @@ class GivenTestCaseExistsInDatabase(PluginTestCase):
         cls.backend.rpc.TestCase.create = MagicMock()
 
     def test_when_test_case_get_or_create_then_reuses_it(self):
-        test_case = self.backend.test_case_get_or_create('Automated test case')
+        test_case, created = self.backend.test_case_get_or_create(
+            'Automated test case')
         self.assertEqual(test_case['case_id'], 34)
+        self.assertFalse(created)
         self.backend.rpc.TestCase.create.assert_not_called()
 
 
@@ -31,8 +33,10 @@ class GivenTestCaseDoesNotExistInDatabase(PluginTestCase):
         cls.backend.confirmed_id = 666
 
     def test_when_test_case_get_or_create_then_creates_it(self):
-        test_case = self.backend.test_case_get_or_create('Automated test case')
+        test_case, created = self.backend.test_case_get_or_create(
+            'Automated test case')
         self.assertEqual(test_case['case_id'], 43)
+        self.assertTrue(created)
         self.backend.rpc.TestCase.create.assert_called_with({
             'summary': 'Automated test case',
             'category': 999,

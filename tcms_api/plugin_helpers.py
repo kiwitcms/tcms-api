@@ -21,7 +21,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
             ... parse test results ...
 
-            test_case_id = backend.test_case_get_or_create(<description>)
+            test_case_id, _ = backend.test_case_get_or_create(<description>)
             backend.add_test_case_to_plan(test_case_id, backend.plan_id)
             test_execution_id = backend.add_test_case_to_run(test_case_id,
                                                              backend.run_id)
@@ -398,9 +398,11 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
             :param summary: A TestCase summary
             :type summary: str
-            :return: Serialized ``tcms.testcase.models.TestCase``
-            :rtype: dict
+            :return: Serialized ``tcms.testcase.models.TestCase`` and boolean
+                     flag to indicate if the TestCase has just been created!
+            :rtype: (dict, bool)
         """
+        created = False
         test_case = self.rpc.TestCase.filter({
             'summary': summary,
             'category__product': self.product_id,
@@ -415,8 +417,9 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                 'notes': 'Created by tcms_api.plugin_helpers.Backend',
                 'is_automated': True,
             })]
+            created = True
 
-        return test_case[0]
+        return test_case[0], created
 
     def add_test_case_to_plan(self, case_id, plan_id):
         """
