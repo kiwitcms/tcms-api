@@ -1,6 +1,7 @@
 # Copyright (c) 2019 Alexander Todorov <atodorov@MrSenko.com>
 
 import os
+from datetime import datetime
 
 from . import TCMS
 
@@ -369,6 +370,22 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             self._cases_in_test_run[case['id']] = case['execution_id']
 
         return int(run_id)
+
+    def finish_test_run(self):
+        """
+            .. important::
+
+                Test runner plugins **may** call this method!
+
+            May be called at the end when there are no more test executions to
+            be sent to Kiwi TCMS. Default implementation will update
+            ``TR.stop_date``.
+
+            :return: None
+        """
+        self.rpc.TestRun.update(self.run_id, {
+            'stop_date': datetime.now().isoformat().replace('T', ' ')[:19],
+        })
 
     def test_case_get_or_create(self, summary):
         """
