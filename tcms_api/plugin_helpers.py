@@ -281,6 +281,16 @@ class Backend:  # pylint: disable=too-many-instance-attributes
         """
         return os.environ.get('TCMS_PLAN_ID', 0)
 
+    def default_tester_id(self):
+        """
+            Used internally and by default this is the user sending the API
+            request. Plugins may want to override this.
+
+            :return: User ID
+            :rtype: int
+        """
+        return self.rpc.User.filter()[0]['id']
+
     def get_plan_id(self, run_id):
         """
             If a TestRun with PK `run_id` exists then return the TestPlan to
@@ -478,7 +488,10 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             :type comment: str
             :return: None
         """
-        self.rpc.TestExecution.update(test_execution_id, {'status': status_id})
+        self.rpc.TestExecution.update(test_execution_id, {
+            'status': status_id,
+            'tested_by': self.default_tester_id(),
+        })
 
         if comment:
             self.add_comment(test_execution_id, comment)
