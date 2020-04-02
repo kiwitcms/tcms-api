@@ -332,6 +332,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                     'product_version': version_id,
                     'is_active': True,
                     'type': plan_type_id,
+                    'author': self.default_tester_id(),
                 })]
 
             # newly created TP
@@ -361,14 +362,18 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             version_id, version_val = self.get_version_id(product_id)
             build_id, build_number = self.get_build_id(product_id, version_id)
             plan_id = self.get_plan_id(0)
-            # the user issuing the request
-            user_id = self.rpc.User.filter()[0]['id']
+            # TR.manager is always the author of the TP, which is either
+            # another existing user (existing TP) or self.default_tester_id()
+            # in case of newly created TP
+            manager_id = self.rpc.TestPlan.filter({
+                'pk': plan_id
+            })[0]['author_id']
 
             testrun = self.rpc.TestRun.create({
                 'summary': self.prefix + 'Results for %s, %s, %s' % (
                     product_name, version_val, build_number
                 ),
-                'manager': user_id,
+                'manager': manager_id,
                 'default_tester': self.default_tester_id(),
                 'plan': plan_id,
                 'build': build_id,
