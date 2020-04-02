@@ -46,6 +46,7 @@ class Given_TCMS_RUN_ID_IsNotPresent(PluginTestCase):
             self.backend.rpc.TestRun.create.assert_called_with({
                 'summary': '[TAP] Results for p.Test, v.Test, b.Test',
                 'manager': 88,
+                'default_tester': 88,
                 'plan': 77,
                 'build': 66,
             })

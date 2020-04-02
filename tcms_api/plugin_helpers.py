@@ -369,6 +369,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                     product_name, version_val, build_number
                 ),
                 'manager': user_id,
+                'default_tester': self.default_tester_id(),
                 'plan': plan_id,
                 'build': build_id,
             })
