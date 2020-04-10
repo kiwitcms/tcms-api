@@ -34,5 +34,6 @@ artifacts:
 test_script:
   - 'sed -i "s|-p \$(which python)||" tests/check-build'
   - 'sed -i "s|bin/activate|Scripts/activate|" tests/check-build'
+  - 'sed -i "s|--no-binary :all: gssapi|--only-binary :all: gssapi|" tests/check-build'
   - 'sed -i "s|pip install gssapi||" tests/check-build'
   - "make %MAKE%"
