@@ -50,6 +50,13 @@ a 64bit installation, see
 CHANGELOG
 ---------
 
+v8.3.0 (10 April 2020)
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Use ``gssapi`` library for kerberos communications on both Linux and Windows
+- Requires MIT Kerberos for Windows, see installation instructions
+
+
 v8.2.0 (02 April 2020)
 ~~~~~~~~~~~~~~~~~~~~~~
 
