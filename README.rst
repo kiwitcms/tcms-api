@@ -40,6 +40,12 @@ INSTALLATION
 
     pip install tcms-api
 
+**WARNING:** on Windows you need to install MIT Kerberos and make sure
+``C:\Program Files\MIT\Kerberos\bin`` is included in ``%PATH%`` -
+this is usually the case when you install and restart! It must be
+a 64bit installation, see
+`MIT Kerberos for Windows 4.1 <https://web.mit.edu/kerberos/dist/index.html#kfw-4.1>`_
+
 
 CHANGELOG
 ---------
