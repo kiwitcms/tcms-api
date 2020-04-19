@@ -46,6 +46,11 @@ this is usually the case when you install and restart! It must be
 a 64bit installation, see
 `MIT Kerberos for Windows 4.1 <https://web.mit.edu/kerberos/dist/index.html#kfw-4.1>`_
 
+**WARNING:** on Linux you will need gcc, Python and kerberos devel packages to
+build ``gssapi`` because it doesn't provide binary packages. Try
+``dnf install gcc krb5-devel python3-devel`` (Red Hat/Fedora) or
+``apt-get install gcc libkrb5-dev libpython3-dev`` (Debian/Ubuntu).
+
 
 CHANGELOG
 ---------
