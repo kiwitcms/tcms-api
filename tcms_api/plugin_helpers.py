@@ -86,10 +86,36 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             'name': 'CONFIRMED'
         })[0]['id']
 
+    def get_statuses_by_weight(self, lookup_condition):
+        """
+         Get a list of statuses based on lookup condition.
+
+         :param lookup_condition: ``tcms.testruns.models.TestExecutionStatus``
+            lookup condition
+         :type lookup_condition: dict
+         :rtype: list
+        """
+        return self.rpc.TestExecutionStatus.filter(lookup_condition)
+
+    def get_status_id_fallback(self, name):
+        """
+        Get status based on weight if name not found
+
+        :param name: ``tcms.testruns.models.TestExecutionStatus`` name
+        :type name: str
+        :rtype: int
+        """
+        if name in ['PASSED', 'WAIVED']:
+            lookup_condition = 'weight__gt'
+        elif name in ['FAILED', 'ERROR']:
+            lookup_condition = 'weight__lt'
+        return self.get_statuses_by_weight({lookup_condition: 0})[0]['id']
+
     def get_status_id(self, name):
         """
             Get the PK of ``tcms.testruns.models.TestExecutionStatus``
-            matching the test execution status.
+            matching the test execution status name or fallback based on
+            weight.
 
             .. important::
 
@@ -102,10 +128,12 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             :rtype: int
         """
         if name not in self._statuses:
-            self._statuses[name] = self.rpc.TestExecutionStatus.filter({
-                'name': name
-            })[0]['id']
-
+            try:
+                self._statuses[name] = self.rpc.TestExecutionStatus.filter({
+                    'name': name
+                })[0]['id']
+            except IndexError:
+                self._statuses[name] = self.get_status_id_fallback(name)
         return self._statuses[name]
 
     def get_product_id(self, plan_id):

@@ -22,3 +22,18 @@ class GivenStatusCache(PluginTestCase):
         self.backend.rpc.TestExecutionStatus.filter.assert_called_with({
             'name': 'FAILED',
         })
+
+
+class GivenStatusFallback(PluginTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.backend.rpc = MagicMock()
+        cls.backend.rpc.TestExecutionStatus.filter.side_effect = [IndexError,
+                                                                  MagicMock()]
+
+    def test_when_status_not_found_by_name_then_return_by_weight(self):
+        self.backend.get_status_id('ERROR')
+        self.backend.rpc.TestExecutionStatus.filter.assert_called_with({
+            'weight__lt': 0,
+        })
