@@ -55,6 +55,16 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v8.4.0 (25 June 2020)
+~~~~~~~~~~~~~~~~~~~~~
+
+- Add instructions how to install ``gssapi`` because they don't ship binary
+  packages on Linux
+- Provide ``plugin_helpers.Backend.get_statuses_by_weight()`` and fall-back
+  to it if TestExecutionStatus can't be found by name. This is to be used
+  by Kiwi TCMS plugins (Bryan Mutai)
+
+
 v8.3.0 (10 April 2020)
 ~~~~~~~~~~~~~~~~~~~~~~
 
