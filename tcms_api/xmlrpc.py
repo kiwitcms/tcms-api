@@ -21,8 +21,8 @@ class CookieTransport(Transport):
     scheme = 'http'
     user_agent = 'tcms-api/%s' % __version__
 
-    def __init__(self, use_datetime=False, use_builtin_types=False):
-        super().__init__(use_datetime, use_builtin_types)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._cookies = []
 
     def send_headers(self, connection, headers):
