@@ -1,4 +1,4 @@
-dist: trusty
+dist: bionic
 sudo: required
 language: python
 python:
@@ -9,6 +9,14 @@ env:
   - MAKE=pylint
   - MAKE=test-codecov
   - MAKE=build
+
+matrix:
+  include:
+    - python: 3.7
+      env: MAKE=test-codecov
+
+    - python: 3.8
+      env: MAKE=test-codecov
 
 install:
   - pip install -r devel.txt
