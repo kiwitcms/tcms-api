@@ -55,6 +55,13 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v8.5.0 (04 August 2020)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Fix ``super()`` call in ``CookieTransport`` class to make this package
+  compatible with Python 3.8 (Václav Klikar)
+
+
 v8.4.0 (25 June 2020)
 ~~~~~~~~~~~~~~~~~~~~~
 
