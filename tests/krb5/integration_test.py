@@ -39,7 +39,7 @@ class IntegrationTestCase(unittest.TestCase):
             cls.rpc = TCMS().exec
 
     def test_readonly_filtering_works(self):
-        results = self.rpc.User.filter()
+        results = self.rpc.Product.filter({})
         self.assertGreater(len(results), 0)
 
     def test_create_objects_works(self):
