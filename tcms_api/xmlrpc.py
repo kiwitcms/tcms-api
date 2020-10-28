@@ -7,7 +7,11 @@ from http import HTTPStatus
 from http.client import HTTPSConnection
 from xmlrpc.client import SafeTransport, Transport, ServerProxy
 
-import gssapi
+try:
+    import gssapi
+except ImportError:
+    gssapi = None
+
 import requests
 
 from tcms_api.version import __version__
@@ -140,6 +144,11 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
         if not url.startswith('https://'):
             raise Exception("https:// required for GSSAPI authentication."
                             "URL provided: %s" % url)
+
+        if gssapi is None:
+            raise RuntimeError("gssapi not found! "
+                               "Try pip install tcms-api[gssapi]")
+
         super().__init__(username, password, url)
 
     def login(self, username, password, url):
