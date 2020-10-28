@@ -37,6 +37,9 @@ setup(name='tcms-api',
       url='https://github.com/kiwitcms/tcms-api',
       python_requires='>=3.6',
       install_requires=get_install_requires('requirements.txt'),
+      extras_require={
+          'gssapi': ['gssapi'],
+      },
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Environment :: Console',
