@@ -15,12 +15,6 @@ if 'kiwitcms_kerberos' not in INSTALLED_APPS:   # noqa: F821
 if 'social_django' not in INSTALLED_APPS:   # noqa: F821
     INSTALLED_APPS.append('social_django')  # noqa: F821
 
-if 'social_django.views.auth' not in PUBLIC_VIEWS:   # noqa: F821
-    PUBLIC_VIEWS.append('social_django.views.auth')  # noqa: F821
-
-if 'social_django.views.complete' not in PUBLIC_VIEWS:   # noqa: F821
-    PUBLIC_VIEWS.append('social_django.views.complete')  # noqa: F821
-
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_PIPELINE = [
