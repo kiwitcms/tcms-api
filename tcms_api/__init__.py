@@ -107,8 +107,8 @@ class TCMS:  # pylint: disable=too-few-public-methods
         # Make sure the server URL is set
         try:
             config['tcms']['url'] is not None
-        except (KeyError, AttributeError):
-            raise Exception("No url found in %s" % self._path)
+        except (KeyError, AttributeError) as err:
+            raise Exception("No url found in %s" % self._path) from err
 
         if strtobool(config['tcms'].get('use_kerberos', 'False')):
             # use Kerberos
@@ -121,8 +121,9 @@ class TCMS:  # pylint: disable=too-few-public-methods
             TCMS._connection = TCMSXmlrpc(config['tcms']['username'],
                                           config['tcms']['password'],
                                           config['tcms']['url']).server
-        except KeyError:
-            raise Exception("username/password required in %s" % self._path)
+        except KeyError as err:
+            raise Exception(
+                "username/password required in %s" % self._path) from err
 
         return
 
