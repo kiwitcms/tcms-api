@@ -59,6 +59,11 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v8.6.0 (28 October 2020)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Use a sub-package to install gssapi, see installation instructions
+
 v8.5.0 (04 August 2020)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
