@@ -1,4 +1,4 @@
-# Copyright (c) 2019 Alexander Todorov <atodorov@MrSenko.com>
+# Copyright (c) 2019-2021 Alexander Todorov <atodorov@MrSenko.com>
 
 import os
 from datetime import datetime
@@ -230,7 +230,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
         return version[0]['id'], version_val
 
-    def get_build_id(self, product_id, _version_id):
+    def get_build_id(self, version_id):
         """
             Return a ``tcms.management.models.Build`` (PK, name).
 
@@ -238,9 +238,6 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
                 For internal use by `.configure()`!
 
-            :param product_id: ``tcms.management.models.Product`` PK
-                               for which to look for Build
-            :type product_id: int
             :param version_id: ``tcms.management.models.Version`` PK
                                for which to look for Build
             :type version_id: int
@@ -254,12 +251,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             - use `$BUILD_NUMBER` as Build.name if specified
 
             If Build doesn't exist in the database it will be created with the
-            specified `product_id`!
-
-            .. note::
-
-                For `version_id` see
-                https://github.com/kiwitcms/Kiwi/issues/246
+            specified `version_id`!
         """
         build_number = os.environ.get('TCMS_BUILD',
                                       os.environ.get('TRAVIS_BUILD_NUMBER',
@@ -271,10 +263,10 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                             'TRAVIS_BUILD_NUMBER or BUILD_NUMBER')
 
         build = self.rpc.Build.filter({'name': build_number,
-                                       'product': product_id})
+                                       'version': version_id})
         if not build:
             build = [self.rpc.Build.create({'name': build_number,
-                                            'product': product_id})]
+                                            'version': version_id})]
 
         return build[0]['id'], build_number
 
@@ -388,7 +380,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
         if not run_id:
             product_id, product_name = self.get_product_id(0)
             version_id, version_val = self.get_version_id(product_id)
-            build_id, build_number = self.get_build_id(product_id, version_id)
+            build_id, build_number = self.get_build_id(version_id)
             plan_id = self.get_plan_id(0)
             # TR.manager is always the author of the TP, which is either
             # another existing user (existing TP) or self.default_tester_id()
