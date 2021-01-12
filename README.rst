@@ -59,10 +59,22 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v9.0 (12 January 2021)
+~~~~~~~~~~~~~~~~~~~~~~
+
+**WARNING:** contains backwards incompatible changes!
+
+- Compatible with Kiwi TCMS v9.0 or later
+- Method ``Backend.build_id()`` doesn't receive ``product_id`` as firsts
+  parameter anymore! Related to Kiwi TCMS
+  `Issue #246 <https://github.com/kiwitcms/Kiwi/issues/246>`_
+
+
 v8.6.0 (28 October 2020)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Use a sub-package to install gssapi, see installation instructions
+
 
 v8.5.0 (04 August 2020)
 ~~~~~~~~~~~~~~~~~~~~~~~
