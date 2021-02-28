@@ -79,8 +79,8 @@ class GivenTestPlanExistsInDatabase(PluginTestCase):
         super().setUpClass()
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.TestPlan.filter = MagicMock(return_value=[{
-            'product_id': 44,
-            'product': 'Four-forty',
+            'product': 44,
+            'product__name': 'Four-forty',
         }])
         cls.backend.rpc.Product.filter = MagicMock()
 
@@ -130,5 +130,5 @@ class GivenProductDoesntExistInDatabase(PluginTestCase):
             self.assertEqual(product_name, 'p.Test')
             self.backend.rpc.Product.create.assert_called_with({
                 'name': 'p.Test',
-                'classification_id': 4,
+                'classification': 4,
             })
