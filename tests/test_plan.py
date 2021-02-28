@@ -10,7 +10,7 @@ class GivenRunExistsInDatabase(PluginTestCase):
         super().setUpClass()
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.TestRun.filter = MagicMock(
-            return_value=[{'id': 4, 'plan_id': 99}])
+            return_value=[{'id': 4, 'plan': 99}])
         cls.backend.rpc.TestPlan.filter = MagicMock()
         cls.backend.rpc.TestPlan.create = MagicMock()
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #
-# Copyright (c) 2020 Kiwi TCMS project. All rights reserved.
+# Copyright (c) 2020-2021 Kiwi TCMS project. All rights reserved.
 # Author: Alexander Todorov <info@kiwitcms.org>
 #
 
@@ -54,7 +54,7 @@ class IntegrationTestCase(unittest.TestCase):
         product_name = "tcms-api-%s" % now
         result = self.rpc.Product.create({
             'name': product_name,
-            'classification_id': classification_id
+            'classification': classification_id
         })
         self.assertEqual(result['name'], product_name)
 

@@ -163,8 +163,8 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
         test_plan = self.rpc.TestPlan.filter({'pk': plan_id})
         if test_plan:
-            product_id = test_plan[0]['product_id']
-            product_name = test_plan[0]['product']
+            product_id = test_plan[0]['product']
+            product_name = test_plan[0]['product__name']
         else:
             product_name = os.environ.get('TCMS_PRODUCT',
                                           os.environ.get('TRAVIS_REPO_SLUG',
@@ -180,7 +180,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                 class_id = self.rpc.Classification.filter({})[0]['id']
                 product = [self.rpc.Product.create({
                     'name': product_name,
-                    'classification_id': class_id
+                    'classification': class_id
                 })]
             product_id = product[0]['id']
 
@@ -359,7 +359,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             return result[0]['id']
 
         # TP to which existing TR is assigned
-        return result[0]['plan_id']
+        return result[0]['plan']
 
     def get_run_id(self):
         """
@@ -387,7 +387,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             # in case of newly created TP
             manager_id = self.rpc.TestPlan.filter({
                 'pk': plan_id
-            })[0]['author_id']
+            })[0]['author']
 
             testrun = self.rpc.TestRun.create({
                 'summary': self.prefix + 'Results for %s, %s, %s' % (
