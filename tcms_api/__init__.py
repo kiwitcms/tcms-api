@@ -4,7 +4,7 @@
 #   Copyright (c) 2012 Red Hat, Inc. All rights reserved.
 #   Author: Petr Splichal <psplicha@redhat.com>
 #
-#   Copyright (c) 2018,2020 Kiwi TCMS project. All rights reserved.
+#   Copyright (c) 2018,2020-2021 Kiwi TCMS project. All rights reserved.
 #   Author: Alexander Todorov <info@kiwitcms.org>
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,6 +54,11 @@ where ``EXAMPLE.COM`` matches the realm in your organization.
 
     It's also possible to provide system-wide config in ``/etc/tcms.conf``,
     which is valid only on Linux!
+
+    Execute the following Python snippet to find the exact location on your system::
+
+        import os
+        print(os.path.expanduser('~/.tcms.conf'))
 
 Connect to backend::
 
