@@ -59,6 +59,14 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v10.0 (02 March 2021)
+~~~~~~~~~~~~~~~~~~~~~
+
+**WARNING:** contains backwards incompatible changes!
+
+- Compatible with Kiwi TCMS v10.0 or later
+
+
 v9.0 (12 January 2021)
 ~~~~~~~~~~~~~~~~~~~~~~
 
