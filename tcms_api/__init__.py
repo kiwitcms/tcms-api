@@ -55,7 +55,8 @@ where ``EXAMPLE.COM`` matches the realm in your organization.
     It's also possible to provide system-wide config in ``/etc/tcms.conf``,
     which is valid only on Linux!
 
-    Execute the following Python snippet to find the exact location on your system::
+    Execute the following Python snippet to find the exact location on your
+    system::
 
         import os
         print(os.path.expanduser('~/.tcms.conf'))
