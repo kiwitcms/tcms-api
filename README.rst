@@ -59,6 +59,18 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v11.0 (05 Dec 2021)
+~~~~~~~~~~~~~~~~~~~
+
+**WARNING:** contains backwards incompatible changes!
+
+- Method ``plugin_helpers.Backend.add_test_case_to_run()`` now returns a list
+- Adjust internal API calls for upcoming Kiwi TCMS v11.0
+- Still compatible with Kiwi TCMS v10.x API
+- Start using f-strings. Available since Python 3.6 which is the minimum
+  required version for ``tcms-api`` anyway
+
+
 v10.0 (02 March 2021)
 ~~~~~~~~~~~~~~~~~~~~~
 
