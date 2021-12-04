@@ -51,10 +51,6 @@ jobs:
 
     - name: Build & start services
       run: |
-        # only until a new upstream version with 3.8 support is released
-        git clone -q --depth 1 https://github.com/kiwitcms/Kiwi
-        make -C Kiwi/ docker-image
-
         make build-services
         make run-services
 
