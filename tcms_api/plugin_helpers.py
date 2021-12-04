@@ -38,7 +38,6 @@ class Backend:  # pylint: disable=too-many-instance-attributes
     """
 
     _statuses = {}
-    _cases_in_test_run = {}
 
     def __init__(self, prefix=''):
         """
@@ -401,11 +400,6 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             })
             run_id = testrun['id']
 
-        # fetch pre-existing test cases in this TestRun
-        # used to avoid adding existing TC to TR later
-        for case in self.rpc.TestRun.get_cases(run_id):
-            self._cases_in_test_run[case['id']] = case['execution_id']
-
         return int(run_id)
 
     def finish_test_run(self):
@@ -491,9 +485,6 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                 objects
             :rtype: list(dict)
         """
-        if case_id in self._cases_in_test_run.keys():
-            return self._cases_in_test_run[case_id]
-
         result = self.rpc.TestRun.add_case(run_id, case_id)
         if not isinstance(result, list):
             result = [result]
