@@ -23,7 +23,7 @@ VERBOSE = 0
 class CookieTransport(Transport):
     """A subclass of xmlrpc.client.Transport that supports cookies."""
     scheme = 'http'
-    user_agent = 'tcms-api/%s' % __version__
+    user_agent = f'tcms-api/{__version__}'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -59,9 +59,9 @@ class KerbTransport(SafeCookieTransport):
         service_name = gssapi.Name(service, gssapi.NameType.hostbased_service)
         context = gssapi.SecurityContext(usage="initiate", name=service_name)
         token = context.step()
-
+        token = b64encode(token).decode()
         extra_headers = [
-            ("Authorization", "Negotiate %s" % b64encode(token).decode())
+            ("Authorization", f"Negotiate {token}")
         ]
 
         return host, extra_headers, x509
@@ -143,7 +143,7 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
     def __init__(self, username, password, url):
         if not url.startswith('https://'):
             raise Exception("https:// required for GSSAPI authentication."
-                            "URL provided: %s" % url)
+                            f"URL provided: {url}")
 
         if gssapi is None:
             raise RuntimeError("gssapi not found! "

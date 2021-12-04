@@ -105,7 +105,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
         if not os.path.exists(self._path):
             self._path = "/etc/tcms.conf"
         if not os.path.exists(self._path):
-            raise Exception("Config file '%s' not found" % self._path)
+            raise Exception(f"Config file '{self._path}' not found")
 
         config = ConfigParser()
         config.read(self._path)
@@ -114,7 +114,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
         try:
             config['tcms']['url'] is not None
         except (KeyError, AttributeError) as err:
-            raise Exception("No url found in %s" % self._path) from err
+            raise Exception(f"No url found in {self._path}") from err
 
         if strtobool(config['tcms'].get('use_kerberos', 'False')):
             # use Kerberos
@@ -129,7 +129,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
                                           config['tcms']['url']).server
         except KeyError as err:
             raise Exception(
-                "username/password required in %s" % self._path) from err
+                f"username/password required in {self._path}") from err
 
         return
 
