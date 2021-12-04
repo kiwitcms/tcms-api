@@ -12,7 +12,6 @@ class Given_TCMS_RUN_ID_IsPresent(PluginTestCase):
         super().setUpClass()
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.TestRun.create = MagicMock()
-        cls.backend.rpc.TestRun.get_cases = MagicMock(return_value=[])
 
     def test_when_get_run_id_then_will_use_it(self):
         with patch.dict(os.environ, {
@@ -37,8 +36,6 @@ class Given_TCMS_RUN_ID_IsNotPresent(PluginTestCase):
         cls.backend.rpc.TestPlan.filter = MagicMock(
             return_value=[{'author': 88}])
         cls.backend.rpc.TestRun.create = MagicMock(return_value={'id': 99})
-        cls.backend.rpc.TestRun.get_cases = MagicMock(
-            return_value=[{'id': 1111, 'execution_id': 2222}])
 
     def test_when_get_run_id_then_will_create_TestRun(self):
         with patch.dict(os.environ, {}, True):
@@ -52,9 +49,6 @@ class Given_TCMS_RUN_ID_IsNotPresent(PluginTestCase):
                 'build': 66,
             })
 
-            # validate that fetching existing case-runs works
-            self.assertEqual(self.backend._cases_in_test_run[1111], 2222)
-
 
 class GivenEmptyTestRun(PluginTestCase):
     @classmethod
@@ -67,16 +61,3 @@ class GivenEmptyTestRun(PluginTestCase):
     def test_when_add_test_case_to_run_then_TestCase_is_added(self):
         self.backend.add_test_case_to_run(11, 222)
         self.backend.rpc.TestRun.add_case.assert_called_with(222, 11)
-
-
-class GivenTestRunWithTestCases(PluginTestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.backend._cases_in_test_run = {11: 222}
-        cls.backend.rpc = MagicMock()
-        cls.backend.rpc.TestRun.add_case = MagicMock()
-
-    def test_when_add_test_case_to_run_then_TestCase_is_not_added(self):
-        self.backend.add_test_case_to_run(11, 222)
-        self.backend.rpc.TestRun.add_case.assert_not_called()
