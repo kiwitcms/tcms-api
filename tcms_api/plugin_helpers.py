@@ -335,9 +335,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             product_id, product_name = self.get_product_id(0)
             version_id, version_name = self.get_version_id(product_id)
 
-            name = self.prefix + 'Plan for %s (%s)' % (product_name,
-                                                       version_name)
-
+            name = f'{self.prefix} Plan for {product_name} ({version_name})'
             result = self.rpc.TestPlan.filter({'name': name,
                                                'product': product_id,
                                                'product_version': version_id})
@@ -390,9 +388,8 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             })[0]['author']
 
             testrun = self.rpc.TestRun.create({
-                'summary': self.prefix + 'Results for %s, %s, %s' % (
-                    product_name, version_val, build_number
-                ),
+                'summary': f'{self.prefix} Results for {product_name}, '
+                           f'{version_val}, {build_number}',
                 'manager': manager_id,
                 'default_tester': self.default_tester_id(),
                 'plan': plan_id,
