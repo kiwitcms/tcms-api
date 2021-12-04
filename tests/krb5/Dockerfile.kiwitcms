@@ -1,8 +1,8 @@
 FROM kiwitcms/kiwi
 
 USER 0
-RUN dnf -y --setopt=tsflags=nodocs install gcc krb5-devel python38-devel && \
-    dnf clean all
+RUN microdnf --nodocs install gcc krb5-devel python38-devel && \
+    microdnf clean all
 USER 1001
 
 RUN pip install --no-cache-dir -U kiwitcms
