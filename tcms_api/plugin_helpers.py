@@ -23,11 +23,12 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
             test_case_id, _ = backend.test_case_get_or_create(<description>)
             backend.add_test_case_to_plan(test_case_id, backend.plan_id)
-            test_execution_id = backend.add_test_case_to_run(test_case_id,
-                                                             backend.run_id)
-            backend.update_test_execution(test_execution_id,
-                                          <status_id>,
-                                          <comment>)
+            test_executions = backend.add_test_case_to_run(test_case_id,
+                                                           backend.run_id)
+            for execution in test_executions:
+                backend.update_test_execution(execution['id'],
+                                              <status_id>,
+                                              <comment>)
 
         :param prefix: Prefix which will be added to TestPlan.name and
                        TestRun.summary
@@ -486,13 +487,17 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             :type case_id: int
             :param run_id: ``tcms.testruns.models.TestRun`` PK
             :type run_id: int
-            :return: ``tcms.testruns.models.TestExecution`` PK
-            :rtype: int
+            :return: List of serialized ``tcms.testruns.models.TestExecution``
+                objects
+            :rtype: list(dict)
         """
         if case_id in self._cases_in_test_run.keys():
             return self._cases_in_test_run[case_id]
 
-        return self.rpc.TestRun.add_case(run_id, case_id)['id']
+        result = self.rpc.TestRun.add_case(run_id, case_id)
+        if not isinstance(result, list):
+            result = [result]
+        return result
 
     def update_test_execution(self,
                               test_execution_id,
