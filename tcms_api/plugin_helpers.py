@@ -304,11 +304,23 @@ class Backend:  # pylint: disable=too-many-instance-attributes
     def default_tester_id(self):
         """
             Used internally and by default this is the user sending the API
-            request. Plugins may want to override this.
+            request. Use `$TCMS_DEFAULT_TESTER_ID` to override!
+
+            .. warning::
+
+                Requires ``auth.view_user`` permission if not overriden via
+                environment variable! See
+                https://kiwitcms.readthedocs.io/en/latest/admin.html?highlight=auth.view_user#managing-permissions
+
+            Plugins may want to override this.
 
             :return: User ID
             :rtype: int
         """
+        id_from_env = os.environ.get('TCMS_DEFAULT_TESTER_ID')
+        if id_from_env:
+            return id_from_env
+
         return self.rpc.User.filter()[0]['id']
 
     def get_plan_id(self, run_id):
