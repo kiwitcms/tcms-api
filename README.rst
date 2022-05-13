@@ -59,6 +59,15 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v11.1 (13 May 2022)
+~~~~~~~~~~~~~~~~~~~
+
+- Allow the environment variable ``TCMS_DEFAULT_TESTER_ID`` to override
+  internal queries, pointing directly to the user who will create new
+  test plans, test runs and update test executions.
+- Internal updates around CI
+
+
 v11.0 (05 Dec 2021)
 ~~~~~~~~~~~~~~~~~~~
 
