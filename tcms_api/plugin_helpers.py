@@ -2,6 +2,8 @@
 
 import os
 from datetime import datetime
+# note: change this to import cache in Python 3.9
+from functools import lru_cache as cache
 
 from . import TCMS
 from .version import __version__
@@ -313,6 +315,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
         return os.environ.get('TCMS_PLAN_ID', 0)
 
     @property
+    @cache(maxsize=128)
     def default_tester_id(self):
         """
             Used internally and by default this is the user sending the API
