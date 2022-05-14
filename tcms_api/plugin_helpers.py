@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2021 Alexander Todorov <atodorov@MrSenko.com>
+# Copyright (c) 2019-2022 Alexander Todorov <atodorov@MrSenko.com>
 
 import os
 from datetime import datetime
@@ -7,7 +7,6 @@ from . import TCMS
 
 
 class Backend:  # pylint: disable=too-many-instance-attributes
-
     """
         Facilitates RPC communications with the backend and implements
         behavior described at:
@@ -39,6 +38,15 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
     _statuses = {}
 
+    @property
+    def prefix(self):
+        """
+            Prefix may be overriden via ``TCMS_PREFIX`` environment variable.
+
+            .. versionadded:: 11.2
+        """
+        return os.environ.get('TCMS_PREFIX', self._prefix)
+
     def __init__(self, prefix=''):
         """
             :param prefix: Prefix which will be added to TestPlan.name and
@@ -47,7 +55,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                            .. versionadded:: 5.2
             :type prefix: str
         """
-        self.prefix = prefix
+        self._prefix = prefix
 
         self.rpc = None
         self.run_id = None
