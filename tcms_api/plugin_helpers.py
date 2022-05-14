@@ -312,6 +312,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
         """
         return os.environ.get('TCMS_PLAN_ID', 0)
 
+    @property
     def default_tester_id(self):
         """
             Used internally and by default this is the user sending the API
@@ -378,7 +379,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                     'product_version': version_id,
                     'is_active': True,
                     'type': plan_type_id,
-                    'author': self.default_tester_id(),
+                    'author': self.default_tester_id,
                 }
                 parent_plan_id = os.environ.get('TCMS_PARENT_PLAN')
                 if parent_plan_id:
@@ -413,7 +414,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             build_id, build_number = self.get_build_id(version_id)
             plan_id = self.get_plan_id(0)
             # TR.manager is always the author of the TP, which is either
-            # another existing user (existing TP) or self.default_tester_id()
+            # another existing user (existing TP) or self.default_tester_id
             # in case of newly created TP
             manager_id = self.rpc.TestPlan.filter({
                 'pk': plan_id
@@ -423,7 +424,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                 'summary': f'{self.prefix} Results for {product_name}, '
                            f'{version_val}, {build_number}',
                 'manager': manager_id,
-                'default_tester': self.default_tester_id(),
+                'default_tester': self.default_tester_id,
                 'plan': plan_id,
                 'build': build_id,
             })
@@ -541,7 +542,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
         """
         self.rpc.TestExecution.update(test_execution_id, {
             'status': status_id,
-            'tested_by': self.default_tester_id(),
+            'tested_by': self.default_tester_id,
         })
 
         if comment:
