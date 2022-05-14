@@ -59,6 +59,24 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v11.2 (15 May 2022)
+~~~~~~~~~~~~~~~~~~~
+
+- Make plugin prefix configurable via ``TCMS_PREFIX`` environment variable.
+  Fixes `Issue #6 <https://github.com/kiwitcms/tcms-api/issues/6>`_
+- Use ``TCMS_PARENT_PLAN`` environment variable if specified. Will configure
+  a parent TestPlan. Fixes
+  `Issue #4 <https://github.com/kiwitcms/tcms-api/issues/4>`_
+- Introduce ``plugin_helpers.Backend.name`` and
+  ``plugin_helpers.Backend.version`` attributes
+- Convert ``plugin_helpers.Backend.default_tester_id`` into a cached property
+- Use the account sending the API request if ``default_tester_id`` is None.
+  That avoide the use of ``User.filter`` API method for which most users may
+  not be authorized
+- Sanity check and sanitize URL config. Refs
+  `Issue #45 <https://github.com/kiwitcms/tcms-api/issues/45>`_
+
+
 v11.1 (13 May 2022)
 ~~~~~~~~~~~~~~~~~~~
 
