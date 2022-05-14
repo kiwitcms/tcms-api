@@ -50,7 +50,7 @@ class GivenRunDoesntExistInDatabase(PluginTestCase):
         self.assertEqual(plan_id, 500)
         self.backend.rpc.TestPlan.create.assert_called_with({
             'name': '[TAP] Plan for p.Four (v.Test)',
-            'text': 'Created by tcms_api.plugin_helpers.Backend',
+            'text': self.backend.created_by_text,
             'product': 4,
             'product_version': 44,
             'is_active': True,
