@@ -341,6 +341,11 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
                 For internal use by `.configure()`!
 
+            If ``TCMS_PARENT_PLAN`` environment variable is specified and a new
+            TestPlan is created then it will be created as a child TP.
+
+            .. versionadded:: 11.2
+
             :param run_id: ``tcms.testruns.models.TestRun`` PK
             :type run_id: int
             :return: ``tcms.testplans.models.TestPlan`` PK
@@ -363,7 +368,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             if not result:
                 plan_type_id = self.get_plan_type_id()
 
-                result = [self.rpc.TestPlan.create({
+                args = {
                     'name': name,
                     'text': 'Created by tcms_api.plugin_helpers.Backend',
                     'product': product_id,
@@ -371,7 +376,11 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                     'is_active': True,
                     'type': plan_type_id,
                     'author': self.default_tester_id(),
-                })]
+                }
+                parent_plan_id = os.environ.get('TCMS_PARENT_PLAN')
+                if parent_plan_id:
+                    args['parent'] = parent_plan_id
+                result = [self.rpc.TestPlan.create(args)]
 
             # newly created TP
             return result[0]['id']
