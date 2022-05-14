@@ -2,7 +2,7 @@
 
 import os
 from datetime import datetime
-# note: change this to import cache in Python 3.9
+# change this to import cache in Python 3.9
 from functools import lru_cache as cache
 
 from . import TCMS
@@ -321,22 +321,12 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             Used internally and by default this is the user sending the API
             request. Use `$TCMS_DEFAULT_TESTER_ID` to override!
 
-            .. warning::
-
-                Requires ``auth.view_user`` permission if not overriden via
-                environment variable! See
-                https://kiwitcms.readthedocs.io/en/latest/admin.html?highlight=auth.view_user#managing-permissions
-
             Plugins may want to override this.
 
             :return: User ID
             :rtype: int
         """
-        id_from_env = os.environ.get('TCMS_DEFAULT_TESTER_ID')
-        if id_from_env:
-            return id_from_env
-
-        return self.rpc.User.filter()[0]['id']
+        return os.environ.get('TCMS_DEFAULT_TESTER_ID')
 
     def get_plan_id(self, run_id):
         """
@@ -382,11 +372,15 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                     'product_version': version_id,
                     'is_active': True,
                     'type': plan_type_id,
-                    'author': self.default_tester_id,
                 }
+
+                if self.default_tester_id:
+                    args['author'] = self.default_tester_id
+
                 parent_plan_id = os.environ.get('TCMS_PARENT_PLAN')
                 if parent_plan_id:
                     args['parent'] = parent_plan_id
+
                 result = [self.rpc.TestPlan.create(args)]
 
             # newly created TP
@@ -423,14 +417,20 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                 'pk': plan_id
             })[0]['author']
 
-            testrun = self.rpc.TestRun.create({
+            args = {
                 'summary': f'{self.prefix} Results for {product_name}, '
                            f'{version_val}, {build_number}',
                 'manager': manager_id,
-                'default_tester': self.default_tester_id,
                 'plan': plan_id,
                 'build': build_id,
-            })
+            }
+            if self.default_tester_id:
+                args['default_tester'] = self.default_tester_id
+            else:
+                # b/c TestRun.create() always requires this argument
+                args['default_tester'] = manager_id
+
+            testrun = self.rpc.TestRun.create(args)
             run_id = testrun['id']
 
         return int(run_id)
@@ -543,10 +543,13 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             :type comment: str
             :return: None
         """
-        self.rpc.TestExecution.update(test_execution_id, {
+        args = {
             'status': status_id,
-            'tested_by': self.default_tester_id,
-        })
+        }
+        if self.default_tester_id:
+            args['tested_by'] = self.default_tester_id
+
+        self.rpc.TestExecution.update(test_execution_id, args)
 
         if comment:
             self.add_comment(test_execution_id, comment)

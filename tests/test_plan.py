@@ -27,7 +27,6 @@ class GivenRunDoesntExistInDatabase(PluginTestCase):
         super().setUpClass()
         cls.backend.rpc = MagicMock()
         cls.backend.rpc.TestRun.filter = MagicMock(return_value=[])
-        cls.backend.rpc.User.filter = MagicMock(return_value=[{'id': 88}])
         cls.backend.get_product_id = MagicMock(return_value=(4, 'p.Four'))
         cls.backend.get_version_id = MagicMock(return_value=(44, 'v.Test'))
         cls.backend.get_plan_type_id = MagicMock(return_value=10)
@@ -55,7 +54,6 @@ class GivenRunDoesntExistInDatabase(PluginTestCase):
             'product_version': 44,
             'is_active': True,
             'type': 10,
-            'author': 88,
         })
 
 
