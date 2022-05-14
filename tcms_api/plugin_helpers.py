@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 
 from . import TCMS
+from .version import __version__
 
 
 class Backend:  # pylint: disable=too-many-instance-attributes
@@ -37,6 +38,8 @@ class Backend:  # pylint: disable=too-many-instance-attributes
     """
 
     _statuses = {}
+    name = 'tcms_api.plugin_helpers.Backend'
+    version = __version__
 
     @property
     def prefix(self):
@@ -370,7 +373,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
 
                 args = {
                     'name': name,
-                    'text': 'Created by tcms_api.plugin_helpers.Backend',
+                    'text': self.created_by_text,
                     'product': product_id,
                     'product_version': version_id,
                     'is_active': True,
@@ -471,7 +474,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                 'category': self.category_id,
                 'priority': self.priority_id,
                 'case_status': self.confirmed_id,
-                'notes': 'Created by tcms_api.plugin_helpers.Backend',
+                'notes': self.created_by_text,
                 'is_automated': True,
             })]
             created = True
@@ -559,3 +562,13 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             :return: None
         """
         self.rpc.TestExecution.add_comment(test_execution_id, comment)
+
+    @property
+    def created_by_text(self):
+        if not self.name:
+            raise NotImplementedError
+
+        if not self.version:
+            raise NotImplementedError
+
+        return f'Created by {self.name}, version {self.version}'
