@@ -9,7 +9,8 @@ from . import TCMS
 from .version import __version__
 
 
-class Backend:  # pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-instance-attributes, too-many-public-methods
+class Backend:
     """
         Facilitates RPC communications with the backend and implements
         behavior described at:
@@ -52,15 +53,21 @@ class Backend:  # pylint: disable=too-many-instance-attributes
         """
         return os.environ.get('TCMS_PREFIX', self._prefix)
 
-    def __init__(self, prefix=''):
+    def __init__(self, prefix='', verbose=False):
         """
             :param prefix: Prefix which will be added to TestPlan.name and
                            TestRun.summary
 
                            .. versionadded:: 5.2
             :type prefix: str
+            :param verbose: If ``True`` will print info about created records.
+                            Defaults to ``False``
+
+                           .. versionadded:: 11.3
+            :type verbose: bool
         """
         self._prefix = prefix
+        self.verbose = verbose
 
         self.rpc = None
         self.run_id = None
@@ -69,6 +76,15 @@ class Backend:  # pylint: disable=too-many-instance-attributes
         self.category_id = None
         self.priority_id = None
         self.confirmed_id = None
+
+    def log_info(self, was_created, obj_prefix, obj_id):
+        if self.verbose:
+            verb = {
+                True:  "added",
+                False: "reuse",
+            }[was_created]
+
+            print(f"{verb}: {obj_prefix}-{obj_id}")
 
     def configure(self):
         """
@@ -350,6 +366,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
         """
         plan_id = self.external_plan_id()
         if plan_id:
+            self.log_info(False, "TP", plan_id)
             return plan_id
 
         result = self.rpc.TestRun.filter({'pk': run_id})
@@ -358,6 +375,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             version_id, version_name = self.get_version_id(product_id)
 
             name = f'{self.prefix} Plan for {product_name} ({version_name})'
+            was_created = False
             result = self.rpc.TestPlan.filter({'name': name,
                                                'product': product_id,
                                                'product_version': version_id})
@@ -382,11 +400,14 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                     args['parent'] = parent_plan_id
 
                 result = [self.rpc.TestPlan.create(args)]
+                was_created = True
 
             # newly created TP
+            self.log_info(was_created, "TP", result[0]['id'])
             return result[0]['id']
 
         # TP to which existing TR is assigned
+        self.log_info(False, "TP", result[0]['plan'])
         return result[0]['plan']
 
     def get_run_id(self):
@@ -403,6 +424,7 @@ class Backend:  # pylint: disable=too-many-instance-attributes
             :return: ``tcms.testruns.models.TestRun`` PK
             :rtype: int
         """
+        was_added = False
         run_id = os.environ.get('TCMS_RUN_ID')
 
         if not run_id:
@@ -431,8 +453,10 @@ class Backend:  # pylint: disable=too-many-instance-attributes
                 args['default_tester'] = manager_id
 
             testrun = self.rpc.TestRun.create(args)
+            was_added = True
             run_id = testrun['id']
 
+        self.log_info(was_added, "TR", run_id)
         return int(run_id)
 
     def finish_test_run(self):
