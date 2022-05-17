@@ -59,6 +59,13 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v11.3 (17 May 2022)
+~~~~~~~~~~~~~~~~~~~
+
+- Make it possible for plugins to print info about created/reused TP/TR
+- Specify start_date when creating a TestRun
+
+
 v11.2 (15 May 2022)
 ~~~~~~~~~~~~~~~~~~~
 
