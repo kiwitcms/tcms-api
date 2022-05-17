@@ -445,6 +445,8 @@ class Backend:
                 'manager': manager_id,
                 'plan': plan_id,
                 'build': build_id,
+                'start_date': datetime.now().isoformat().replace(
+                    'T', ' ')[:19],
             }
             if self.default_tester_id:
                 args['default_tester'] = self.default_tester_id

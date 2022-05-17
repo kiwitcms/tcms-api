@@ -1,7 +1,7 @@
 # pylint: disable=invalid-name, protected-access
 
 import os
-from unittest.mock import MagicMock, patch
+from unittest.mock import ANY, MagicMock, patch
 
 from . import PluginTestCase
 
@@ -46,6 +46,7 @@ class Given_TCMS_RUN_ID_IsNotPresent(PluginTestCase):
                 'default_tester': 88,
                 'plan': 77,
                 'build': 66,
+                'start_date': ANY,
             })
 
 
