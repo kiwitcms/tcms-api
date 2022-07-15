@@ -59,6 +59,13 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v11.4 (15 Jul 2022)
+~~~~~~~~~~~~~~~~~~~
+
+- Fallback to C:\tcms.conf in case we're on Windows
+- [pre-commit.ci] pre-commit autoupdate
+
+
 v11.3 (17 May 2022)
 ~~~~~~~~~~~~~~~~~~~
 
