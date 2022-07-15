@@ -52,8 +52,8 @@ where ``EXAMPLE.COM`` matches the realm in your organization.
     ``C:\\Users\\tcms-bot\\.tcms.conf`` on Windows, where ``tcms-bot``
     is the username on the local computer.
 
-    It's also possible to provide system-wide config in ``/etc/tcms.conf``,
-    which is valid only on Linux!
+    It's also possible to provide system-wide config in ``/etc/tcms.conf``
+    on Linux and ``C:\\tcms.conf`` on Windows!
 
     Execute the following Python snippet to find the exact location on your
     system::
@@ -104,6 +104,8 @@ class TCMS:  # pylint: disable=too-few-public-methods
         # Try system settings when the config does not exist in user directory
         if not os.path.exists(self._path):
             self._path = "/etc/tcms.conf"
+        if not os.path.exists(self._path):
+            self._path = "c:/tcms.conf"
         if not os.path.exists(self._path):
             raise Exception(f"Config file '{self._path}' not found")
 
