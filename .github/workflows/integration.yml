@@ -20,7 +20,7 @@ jobs:
         # note: always use the -latest OS variants b/c if conditions
         # match them as literals
         os: [ubuntu-latest]
-        python-version: [3.8]
+        python-version: [3.9]
         gssapi: [with, without]
 
     steps:
