@@ -549,10 +549,13 @@ class Backend:
             result = [result]
         return result
 
+    # pylint: disable=too-many-arguments
     def update_test_execution(self,
                               test_execution_id,
                               status_id,
-                              comment=None):
+                              comment=None,
+                              start_date=None,
+                              stop_date=None):
         """
             Update TestExecution with a status and comment.
 
@@ -567,10 +570,16 @@ class Backend:
             :type status_id: int
             :param comment: the string to add as a comment, defaults to None
             :type comment: str
+            :param start_date: when execution began, default None
+            :type start_date: datetime
+            :param stop_date: when execution completed, default None
+            :type stop_date: datetime
             :return: None
         """
         args = {
             'status': status_id,
+            'start_date': start_date,
+            'stop_date': stop_date,
         }
         if self.default_tester_id:
             args['tested_by'] = self.default_tester_id
