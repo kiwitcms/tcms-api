@@ -59,6 +59,15 @@ build ``gssapi`` because it doesn't provide binary packages. Try
 CHANGELOG
 ---------
 
+v12.2 (04 Apr 2023)
+~~~~~~~~~~~~~~~~~~~
+
+- New arguments for ``plugin_helpers.Backend.update_test_execution()`` method.
+  Now accepts the ``start_date`` and ``stop_date`` arguments at the end of its
+  signature
+- Start testing the client library with Python 3.9
+
+
 v11.4 (15 Jul 2022)
 ~~~~~~~~~~~~~~~~~~~
 
