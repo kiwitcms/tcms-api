@@ -103,6 +103,14 @@ jobs:
 
         make verify-integration
 
+    - name: Upload logs
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: curl.log
+        path: /tmp/curl.log
+        if-no-files-found: ignore
+
     - name: Submit coverage report
       run: |
         codecov --token=cf379ef9-76c2-4aa9-9bf5-5c01303222e0
