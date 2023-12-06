@@ -5,6 +5,7 @@ flake8:
 .PHONY: pylint
 pylint:
 	PYTHONPATH=. python -m pylint --extension-pkg-whitelist=kerberos \
+	                    --load-plugins=pylint.extensions.no_self_use \
 	                    -d missing-docstring -d duplicate-code \
 	                    tcms_api/ tests/
 
