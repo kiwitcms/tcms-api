@@ -138,11 +138,11 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
     def __init__(self, username, password, url):
         if not url.startswith("https://"):
             raise RuntimeError(
-                "https:// required for GSSAPI authentication." f"URL provided: {url}"
+                f"https:// required for GSSAPI authentication. URL provided: {url}"
             )
 
         if gssapi is None:
-            raise RuntimeError("gssapi not found! " "Try pip install tcms-api[gssapi]")
+            raise RuntimeError("gssapi not found! Try pip install tcms-api[gssapi]")
 
         super().__init__(username, password, url)
 
