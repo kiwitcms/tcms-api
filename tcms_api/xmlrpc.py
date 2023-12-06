@@ -110,7 +110,7 @@ class TCMSXmlrpc:
             elif url.startswith("http://"):
                 self.transport = CookieTransport()
             else:
-                raise Exception("Unrecognized URL scheme")
+                raise RuntimeError("Unrecognized URL scheme")
 
         self.server = ServerProxy(
             url, transport=self.transport, verbose=VERBOSE, allow_none=1
@@ -137,7 +137,7 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
 
     def __init__(self, username, password, url):
         if not url.startswith("https://"):
-            raise Exception(
+            raise RuntimeError(
                 "https:// required for GSSAPI authentication." f"URL provided: {url}"
             )
 
