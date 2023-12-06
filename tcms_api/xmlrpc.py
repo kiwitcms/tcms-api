@@ -91,9 +91,8 @@ def get_hostname(url):
     generate the service principal name for Kiwi TCMS and
     the respective Authorize header!
     """
-    _type, uri = urllib.parse.splittype(url)
-    hostname, _path = urllib.parse.splithost(uri)
-    return hostname
+    result = urllib.parse.urlparse(url)
+    return result.netloc
 
 
 class TCMSXmlrpc:
