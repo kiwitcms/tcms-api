@@ -1,6 +1,10 @@
+---
+image:
+  - Visual Studio 2022
+
 environment:
   global:
-    PYTHON: "C:\\Python36-x64"
+    PYTHON: "C:\\Python311-x64"
 
   matrix:
     - MAKE: flake8
