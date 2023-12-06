@@ -26,6 +26,10 @@ else:
 
 
 class DoNotVerifySSLSession(requests.sessions.Session):
+    def __init__(self):
+        super().__init__()
+        self.verify = False
+
     def get(self, url, **kwargs):
         kwargs.setdefault("verify", False)
         return super().get(url, **kwargs)
