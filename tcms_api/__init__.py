@@ -112,7 +112,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
         config = ConfigParser()
         config.read(self._path)
 
-        if strtobool(config['tcms'].get('use_kerberos', 'False')):
+        if strtobool(config["tcms"].get("use_kerberos", "False")):
             # use Kerberos
             TCMS._connection = TCMSKerbXmlrpc(
                 None, None, self.server_url(config)
@@ -122,13 +122,12 @@ class TCMS:  # pylint: disable=too-few-public-methods
         try:
             # use password authentication
             TCMS._connection = TCMSXmlrpc(
-                config['tcms']['username'],
-                config['tcms']['password'],
-                self.server_url(config)
+                config["tcms"]["username"],
+                config["tcms"]["password"],
+                self.server_url(config),
             ).server
         except KeyError as err:
-            raise Exception(
-                f"username/password required in {self._path}") from err
+            raise Exception(f"username/password required in {self._path}") from err
 
         return
 
@@ -146,8 +145,8 @@ class TCMS:  # pylint: disable=too-few-public-methods
         """
         # Make sure the server URL is set
         try:
-            config['tcms']['url'] is not None
+            config["tcms"]["url"] is not None
         except (KeyError, AttributeError) as err:
             raise Exception(f"No url found in {self._path}") from err
 
-        return config['tcms']['url'].replace('json-rpc', 'xml-rpc')
+        return config["tcms"]["url"].replace("json-rpc", "xml-rpc")

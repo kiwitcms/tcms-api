@@ -27,14 +27,14 @@ else:
 
 class DoNotVerifySSLSession(requests.sessions.Session):
     def get(self, url, **kwargs):
-        kwargs.setdefault('verify', False)
+        kwargs.setdefault("verify", False)
         return super().get(url, **kwargs)
 
 
 class IntegrationTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        with patch('requests.sessions.Session') as session:
+        with patch("requests.sessions.Session") as session:
             session.return_value = DoNotVerifySSLSession()
             cls.rpc = TCMS().exec
 
@@ -45,18 +45,19 @@ class IntegrationTestCase(unittest.TestCase):
     def test_create_objects_works(self):
         now = datetime.now().isoformat()
 
-        result = self.rpc.Classification.filter({
-            'name': 'test-products',
-        })[0]
-        self.assertEqual(result['name'], 'test-products')
-        classification_id = result['id']
+        result = self.rpc.Classification.filter(
+            {
+                "name": "test-products",
+            }
+        )[0]
+        self.assertEqual(result["name"], "test-products")
+        classification_id = result["id"]
 
         product_name = "tcms-api-%s" % now
-        result = self.rpc.Product.create({
-            'name': product_name,
-            'classification': classification_id
-        })
-        self.assertEqual(result['name'], product_name)
+        result = self.rpc.Product.create(
+            {"name": product_name, "classification": classification_id}
+        )
+        self.assertEqual(result["name"], product_name)
 
 
 if __name__ == "__main__":
