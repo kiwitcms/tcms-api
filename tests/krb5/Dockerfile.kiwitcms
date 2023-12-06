@@ -1,12 +1,12 @@
 FROM kiwitcms/kiwi
 
 USER 0
-RUN microdnf -y --nodocs install gcc krb5-devel python3-devel && \
+RUN microdnf -y --nodocs install gcc krb5-devel python3.11-devel && \
     microdnf clean all
 USER 1001
 
-RUN pip install --no-cache-dir -U kiwitcms
-RUN pip install --no-cache-dir social-auth-app-django social-auth-kerberos
+RUN pip3 install --no-cache-dir -U kiwitcms
+RUN pip3 install --no-cache-dir social-auth-app-django social-auth-kerberos
 
-COPY ./kiwitcms_kerberos/  /venv/lib64/python3.9/site-packages/kiwitcms_kerberos/
-COPY ./kiwitcms_kerberos/kerberos_settings.py /venv/lib64/python3.9/site-packages/tcms_settings_dir/
+COPY ./kiwitcms_kerberos/  /venv/lib64/python3.11/site-packages/kiwitcms_kerberos/
+COPY ./kiwitcms_kerberos/kerberos_settings.py /venv/lib64/python3.11/site-packages/tcms_settings_dir/
