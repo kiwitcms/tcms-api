@@ -82,7 +82,7 @@ Connect to backend::
 """
 import os
 from configparser import ConfigParser
-from distutils.util import strtobool
+from distutils.util import strtobool  # pylint: disable=deprecated-module
 
 from tcms_api.xmlrpc import TCMSXmlrpc, TCMSKerbXmlrpc
 
