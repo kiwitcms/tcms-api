@@ -4,7 +4,7 @@
 #   Copyright (c) 2012 Red Hat, Inc. All rights reserved.
 #   Author: Petr Splichal <psplicha@redhat.com>
 #
-#   Copyright (c) 2018,2020-2022 Kiwi TCMS project. All rights reserved.
+#   Copyright (c) 2018,2020-2023 Kiwi TCMS project. All rights reserved.
 #   Author: Alexander Todorov <info@kiwitcms.org>
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,7 +107,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
         if not os.path.exists(self._path):
             self._path = "c:/tcms.conf"
         if not os.path.exists(self._path):
-            raise Exception(f"Config file '{self._path}' not found")
+            raise RuntimeError(f"Config file '{self._path}' not found")
 
         config = ConfigParser()
         config.read(self._path)
@@ -127,7 +127,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
                 self.server_url(config),
             ).server
         except KeyError as err:
-            raise Exception(f"username/password required in {self._path}") from err
+            raise RuntimeError(f"username/password required in {self._path}") from err
 
         return
 
@@ -147,6 +147,6 @@ class TCMS:  # pylint: disable=too-few-public-methods
         try:
             config["tcms"]["url"] is not None
         except (KeyError, AttributeError) as err:
-            raise Exception(f"No url found in {self._path}") from err
+            raise RuntimeError(f"No url found in {self._path}") from err
 
         return config["tcms"]["url"].replace("json-rpc", "xml-rpc")

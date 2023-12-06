@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2022 Alexander Todorov <atodorov@MrSenko.com>
+# Copyright (c) 2019-2023 Alexander Todorov <atodorov@MrSenko.com>
 
 import os
 from datetime import datetime
@@ -201,7 +201,7 @@ class Backend:
                 os.environ.get("TRAVIS_REPO_SLUG", os.environ.get("JOB_NAME")),
             )
             if not product_name:
-                raise Exception(
+                raise RuntimeError(
                     "Product name not defined, "
                     "missing one of TCMS_PRODUCT, "
                     "TRAVIS_REPO_SLUG or JOB_NAME"
@@ -252,7 +252,7 @@ class Backend:
             ),
         )
         if not version_val:
-            raise Exception(
+            raise RuntimeError(
                 "Version value not defined, "
                 "missing one of TCMS_PRODUCT_VERSION, "
                 "TRAVIS_COMMIT, TRAVIS_PULL_REQUEST_SHA "
@@ -295,7 +295,7 @@ class Backend:
             os.environ.get("TRAVIS_BUILD_NUMBER", os.environ.get("BUILD_NUMBER")),
         )
         if not build_number:
-            raise Exception(
+            raise RuntimeError(
                 "Build number not defined, "
                 "missing one of TCMS_BUILD, "
                 "TRAVIS_BUILD_NUMBER or BUILD_NUMBER"
