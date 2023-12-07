@@ -40,6 +40,17 @@ https://tcms-api.readthedocs.io/en/latest/modules/tcms_api.html
 CHANGELOG
 ---------
 
+v12.7 (10 Dec 2023)
+~~~~~~~~~~~~~~~~~~~
+
+- Build & test this package with Python 3.11
+- Replace ``urllib.parse`` functions deprecated since Python 3.8
+- Refactor issues reported by newer version of pylint
+- Refactor issues reported by CodeQL
+- Reformat source code with Black
+- Enable ReadTheDocs CI
+
+
 v12.2 (04 Apr 2023)
 ~~~~~~~~~~~~~~~~~~~
 
