@@ -51,7 +51,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "tcms-api"
-copyright = "2018-2020 Kiwi TCMS project and its contributors"
+copyright = "2018-2023 Kiwi TCMS project and its contributors"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
