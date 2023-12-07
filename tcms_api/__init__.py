@@ -112,22 +112,26 @@ class TCMS:  # pylint: disable=too-few-public-methods
         config = ConfigParser()
         config.read(self._path)
 
+        rpc_implementor = None
+        server_url = self.server_url(config)
         if strtobool(config["tcms"].get("use_kerberos", "False")):
             # use Kerberos
-            TCMS._connection = TCMSKerbXmlrpc(
-                None, None, self.server_url(config)
-            ).server
-            return
+            rpc_implementor = TCMSKerbXmlrpc(None, None, server_url)
+        else:
+            try:
+                # use password authentication
+                rpc_implementor = TCMSXmlrpc(
+                    config["tcms"]["username"],
+                    config["tcms"]["password"],
+                    server_url,
+                )
+            except KeyError as err:
+                raise RuntimeError(
+                    f"username/password required in {self._path}"
+                ) from err
 
-        try:
-            # use password authentication
-            TCMS._connection = TCMSXmlrpc(
-                config["tcms"]["username"],
-                config["tcms"]["password"],
-                self.server_url(config),
-            ).server
-        except KeyError as err:
-            raise RuntimeError(f"username/password required in {self._path}") from err
+        rpc_implementor.login()
+        TCMS._connection = rpc_implementor.server
 
         return
 
