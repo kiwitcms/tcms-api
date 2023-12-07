@@ -17,6 +17,7 @@ import sys
 sys.path.insert(0, os.path.abspath("../../"))
 
 import subprocess
+from tcms_api.version import __version__
 
 # generate documentation from Python sources
 subprocess.run(["make", "-C", "../", "apidoc"], check=True)
@@ -58,9 +59,9 @@ copyright = "2018-2023 Kiwi TCMS project and its contributors"
 # built documents.
 #
 # The short X.Y version.
-version = "5.3"
+version = __version__
 # The full version, including alpha/beta/rc tags.
-release = "5.3.0"
+release = __version__
 
 exclude_patterns = []
 
