@@ -116,13 +116,15 @@ class TCMSXmlrpc:
             url, transport=self.transport, verbose=VERBOSE, allow_none=1
         )
 
-        self.login(username, password, url)
+        self.username = username
+        self.password = password
+        self.url = url
 
-    def login(self, username, password, url):  # pylint: disable=unused-argument
+    def login(self):
         """
         Login in the web app to save a session cookie in the cookie jar!
         """
-        self.server.Auth.login(username, password)
+        self.server.Auth.login(self.username, self.password)
 
 
 class TCMSKerbXmlrpc(TCMSXmlrpc):
@@ -146,8 +148,8 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
 
         super().__init__(username, password, url)
 
-    def login(self, username, password, url):
-        url = url.replace("xml-rpc", "login/kerberos")
+    def login(self):
+        url = self.url.replace("xml-rpc", "login/kerberos")
         hostname = get_hostname(url)
 
         _, headers, _ = self.transport.get_host_info(hostname)
