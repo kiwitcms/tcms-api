@@ -4,14 +4,16 @@ from setuptools import setup
 
 
 def get_version():
-    version = open(os.path.join("tcms_api", "version.py")).read()
-    return (
-        version.replace(" ", "")
-        .replace("__version__=", "")
-        .strip()
-        .strip("'")
-        .strip('"')
-    )
+    with open(os.path.join("tcms_api", "version.py"), "r") as file:
+        version = file.read()
+
+        return (
+            version.replace(" ", "")
+            .replace("__version__=", "")
+            .strip()
+            .strip("'")
+            .strip('"')
+        )
 
 
 def get_install_requires(path):
