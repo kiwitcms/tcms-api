@@ -135,10 +135,18 @@ class Backend:
         :type name: str
         :rtype: int
         """
+        lookup_condition = None
+
         if name in ["PASSED", "WAIVED"]:
             lookup_condition = "weight__gt"
         elif name in ["FAILED", "ERROR"]:
             lookup_condition = "weight__lt"
+
+        if not lookup_condition:
+            raise RuntimeError(
+                f"`lookup_condition`is not initialized when searching for {name}. "
+                "Please report a bug at https://github.com/kiwitcms/tcms-api/issues/new"
+            )
         return self.get_statuses_by_weight({lookup_condition: 0})[0]["id"]
 
     def get_status_id(self, name):
