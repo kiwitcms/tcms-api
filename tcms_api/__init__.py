@@ -1,6 +1,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 #   Python API for the Kiwi TCMS test case management system.
+#
 #   Copyright (c) 2012 Red Hat, Inc. All rights reserved.
 #   Author: Petr Splichal <psplicha@redhat.com>
 #
@@ -25,9 +26,27 @@
 This module provides a dictionary based Python interface for the
 Kiwi TCMS test management system. It operates via the XML-RPC protocol.
 
+
 Installation::
 
     pip install tcms-api
+
+
+If you want to use Kerberos then::
+
+    pip install tcms-api[gssapi]
+
+**WARNING:** on Windows you need to install MIT Kerberos and make sure
+``C:\\Program Files\\MIT\\Kerberos\\bin`` is included in ``%PATH%`` -
+this is usually the case when you install and restart! It must be
+a 64bit installation, see
+`MIT Kerberos for Windows 4.1 <https://web.mit.edu/kerberos/dist/index.html#kfw-4.1>`_
+
+**WARNING:** on Linux you will need gcc, Python and kerberos devel packages to
+build ``gssapi`` because it doesn't provide binary packages via PyPI. Try
+``dnf install gcc krb5-devel python3-devel`` (Red Hat/Fedora) or
+``apt-get install gcc libkrb5-dev libpython3-dev`` (Debian/Ubuntu).
+
 
 Minimal config file ``~/.tcms.conf``::
 
