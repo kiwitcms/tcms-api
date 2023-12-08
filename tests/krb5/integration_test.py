@@ -1,46 +1,20 @@
 #!/usr/bin/env python
 
 #
-# Copyright (c) 2020-2021 Kiwi TCMS project. All rights reserved.
+# Copyright (c) 2020-2023 Kiwi TCMS project. All rights reserved.
 # Author: Alexander Todorov <info@kiwitcms.org>
 #
 
-import ssl
 import unittest
-from unittest.mock import patch
 
 from datetime import datetime
-
-import requests
 from tcms_api import TCMS
-
-
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    # Legacy Python that doesn't verify HTTPS certificates by default
-    pass
-else:
-    # Handle target environment that doesn't support HTTPS verification
-    ssl._create_default_https_context = _create_unverified_https_context
-
-
-class DoNotVerifySSLSession(requests.sessions.Session):
-    def __init__(self):
-        super().__init__()
-        self.verify = False
-
-    def get(self, url, **kwargs):
-        kwargs.setdefault("verify", False)
-        return super().get(url, **kwargs)
 
 
 class IntegrationTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        with patch("requests.sessions.Session") as session:
-            session.return_value = DoNotVerifySSLSession()
-            cls.rpc = TCMS().exec
+        cls.rpc = TCMS().exec
 
     def test_readonly_filtering_works(self):
         results = self.rpc.Product.filter({})
