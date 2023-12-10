@@ -69,7 +69,7 @@ jobs:
         # regenerate new certificate, hopefully valie for any sort of hostname
         # we decide to run this container on
         docker exec -i web_kiwitcms_org /usr/bin/sscg -v -f \
-                                            --hostname "web.kiwitcms.org"  \
+                                            --hostname "*"  \
                                             --country BG --locality Sofia \
                                             --organization "Kiwi TCMS" \
                                             --organizational-unit "Quality Engineering" \
