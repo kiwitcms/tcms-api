@@ -66,6 +66,17 @@ jobs:
 
     - name: Install ca.crt from Kiwi TCMS
       run: |
+        # regenerate new certificate, hopefully valie for any sort of hostname
+        # we decide to run this container on
+        docker exec -i web_kiwitcms_org /usr/bin/sscg -v -f \
+                                            --hostname "web.kiwitcms.org"  \
+                                            --country BG --locality Sofia \
+                                            --organization "Kiwi TCMS" \
+                                            --organizational-unit "Quality Engineering" \
+                                            --ca-file       /Kiwi/static/ca.crt     \
+                                            --cert-file     /Kiwi/ssl/localhost.crt \
+                                            --cert-key-file /Kiwi/ssl/localhost.key
+
         sudo mkdir -p /usr/local/share/ca-certificates/
         sudo curl --insecure https://web.kiwitcms.org:8443/static/ca.crt --output /usr/local/share/ca-certificates/Kiwi_TCMS_CA.crt
         sudo update-ca-certificates --fresh --verbose
