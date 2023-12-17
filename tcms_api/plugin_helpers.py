@@ -522,7 +522,7 @@ class Backend:
             test_case = [
                 self.rpc.TestCase.create(
                     {
-                        "summary": summary,
+                        "summary": summary[:255],
                         "category": self.category_id,
                         "priority": self.priority_id,
                         "case_status": self.confirmed_id,
