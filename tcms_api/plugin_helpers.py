@@ -402,7 +402,7 @@ class Backend:
                 plan_type_id = self.get_plan_type_id()
 
                 args = {
-                    "name": name,
+                    "name": name[:255],
                     "text": self.created_by_text,
                     "product": product_id,
                     "product_version": version_id,
