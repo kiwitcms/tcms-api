@@ -40,6 +40,13 @@ https://tcms-api.readthedocs.io/en/latest/modules/tcms_api.html
 CHANGELOG
 ---------
 
+v12.8 (17 Dec 2023)
+~~~~~~~~~~~~~~~~~~~
+
+- When creating a TestPlan limit name to 255 characters
+- When creating a TestCase limit summary to 255 characters
+
+
 v12.7 (10 Dec 2023)
 ~~~~~~~~~~~~~~~~~~~
 
