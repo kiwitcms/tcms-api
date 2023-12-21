@@ -393,6 +393,7 @@ class Backend:
             version_id, version_name = self.get_version_id(product_id)
 
             name = f"{self.prefix} Plan for {product_name} ({version_name})"
+            name = name[:255]
             was_created = False
             result = self.rpc.TestPlan.filter(
                 {"name": name, "product": product_id, "product_version": version_id}
@@ -402,7 +403,7 @@ class Backend:
                 plan_type_id = self.get_plan_type_id()
 
                 args = {
-                    "name": name[:255],
+                    "name": name,
                     "text": self.created_by_text,
                     "product": product_id,
                     "product_version": version_id,
@@ -510,6 +511,7 @@ class Backend:
                  flag to indicate if the TestCase has just been created!
         :rtype: (dict, bool)
         """
+        summary = summary[:255]
         created = False
         test_case = self.rpc.TestCase.filter(
             {
@@ -522,7 +524,7 @@ class Backend:
             test_case = [
                 self.rpc.TestCase.create(
                     {
-                        "summary": summary[:255],
+                        "summary": summary,
                         "category": self.category_id,
                         "priority": self.priority_id,
                         "case_status": self.confirmed_id,
