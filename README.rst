@@ -40,6 +40,13 @@ https://tcms-api.readthedocs.io/en/latest/modules/tcms_api.html
 CHANGELOG
 ---------
 
+v12.8.1 (22 Dec 2023)
+~~~~~~~~~~~~~~~~~~~~~
+
+- Limit TestPlan.name and TestCase.summary length before any usage
+  avoiding possible records mismatch between filter & create operations
+
+
 v12.8 (17 Dec 2023)
 ~~~~~~~~~~~~~~~~~~~
 
