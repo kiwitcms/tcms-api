@@ -149,9 +149,7 @@ class TCMS:  # pylint: disable=too-few-public-methods
                     f"username/password required in {self._path}"
                 ) from err
 
-        rpc_implementor.login()
         TCMS._connection = rpc_implementor.server
-
         return
 
     @property

@@ -120,7 +120,13 @@ class TCMSXmlrpc:
         self.password = password
         self.url = url
 
+        self.login()
+
     def login(self):
+        # note: do not override .login()
+        self._do_login()
+
+    def _do_login(self):
         """
         Login in the web app to save a session cookie in the cookie jar!
         """
@@ -148,7 +154,7 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
 
         super().__init__(username, password, url)
 
-    def login(self):
+    def _do_login(self):
         url = self.url.replace("xml-rpc", "login/kerberos")
         hostname = get_hostname(url)
 
