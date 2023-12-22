@@ -40,6 +40,13 @@ https://tcms-api.readthedocs.io/en/latest/modules/tcms_api.html
 CHANGELOG
 ---------
 
+v12.8.2 (23 Dec 2023)
+~~~~~~~~~~~~~~~~~~~~~
+
+- Refactor calling ``.login()`` method as part of ``__init__`` again
+  because the entire Kiwi TCMS test suite depends on this behavior
+
+
 v12.8.1 (22 Dec 2023)
 ~~~~~~~~~~~~~~~~~~~~~
 
