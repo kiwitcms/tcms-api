@@ -1,11 +1,11 @@
-# pylint: disable=too-few-public-methods
+# pylint: disable=protected-access,too-few-public-methods
 
 import urllib.parse
 
 from base64 import b64encode
 from http import HTTPStatus
 from http.client import HTTPSConnection
-from xmlrpc.client import SafeTransport, Transport, ServerProxy
+from xmlrpc.client import _Method, SafeTransport, Transport, ServerProxy
 
 try:
     import gssapi
@@ -18,6 +18,15 @@ from tcms_api.version import __version__
 
 
 VERBOSE = 0
+
+
+class TCMSProxy(ServerProxy):
+    def __request(self, methodname, params):
+        self._ServerProxy__transport._extra_headers = [("Referer", methodname)]
+        return self._ServerProxy__request(methodname, params)
+
+    def __getattr__(self, name):
+        return _Method(self.__request, name)
 
 
 class CookieTransport(Transport):
@@ -112,7 +121,7 @@ class TCMSXmlrpc:
             else:
                 raise RuntimeError("Unrecognized URL scheme")
 
-        self.server = ServerProxy(
+        self.server = TCMSProxy(
             url, transport=self.transport, verbose=VERBOSE, allow_none=1
         )
 
