@@ -1,5 +1,6 @@
 # pylint: disable=protected-access,too-few-public-methods
 
+import sys
 import urllib.parse
 
 from base64 import b64encode
@@ -33,7 +34,7 @@ class CookieTransport(Transport):
     """A subclass of xmlrpc.client.Transport that supports cookies."""
 
     scheme = "http"
-    user_agent = f"tcms-api/{__version__}"
+    user_agent = f"tcms-api/{__version__}/Python {sys.version}"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
