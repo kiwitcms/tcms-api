@@ -19,6 +19,7 @@ from tcms_api.version import __version__
 
 
 VERBOSE = 0
+_PYTHON_VERSION = sys.version.replace("\n", "")
 
 
 class TCMSProxy(ServerProxy):
@@ -34,7 +35,7 @@ class CookieTransport(Transport):
     """A subclass of xmlrpc.client.Transport that supports cookies."""
 
     scheme = "http"
-    user_agent = f"tcms-api/{__version__}/Python {sys.version}"
+    user_agent = f"tcms-api/{__version__}/Python {_PYTHON_VERSION}"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
