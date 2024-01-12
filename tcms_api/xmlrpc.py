@@ -1,9 +1,10 @@
-# pylint: disable=protected-access,too-few-public-methods
+# pylint: disable=protected-access,too-few-public-methods,invalid-name,attribute-defined-outside-init
 
 import sys
 import urllib.parse
 
 from base64 import b64encode
+from datetime import datetime, timedelta
 from http import HTTPStatus
 from http.client import HTTPSConnection
 from xmlrpc.client import _Method, SafeTransport, Transport, ServerProxy
@@ -23,7 +24,26 @@ _PYTHON_VERSION = sys.version.replace("\n", "")
 
 
 class TCMSProxy(ServerProxy):
+    _connected_since = datetime(2024, 1, 1, 0, 0)
+
     def __request(self, methodname, params):
+        # refresh the connection every 4 minutes to avoid an
+        # `ssl.SSLEOFError: EOF occurred in violation of protocol` error with Python >= 3.10
+        # In practice I've discovered that 5 minutes works as well, 6 minutes fails so
+        # be more cautious and refresh the connection earlier!
+        #
+        # Side note: originally I thought this is related to calling
+        # context.set_alpn_protocols(['http/1.1']) inside http/client.py, introduced in
+        # https://github.com/python/cpython/commit/f97406be4c0a02c1501c7ab8bc8ef3850eddb962
+        # but that doesn't seem to be the case (or is much harder for me to debug)!
+        if getattr(
+            self._ServerProxy__transport,  # pylint: disable=access-member-before-definition
+            "internal_refresh",
+            False,
+        ) and datetime.now() - self._connected_since > timedelta(minutes=4):
+            self._ServerProxy__transport = self._ServerProxy__transport.__class__()
+            self._connected_since = datetime.now()
+
         self._ServerProxy__transport._extra_headers = [("Referer", methodname)]
         return self._ServerProxy__request(methodname, params)
 
@@ -56,11 +76,14 @@ class CookieTransport(Transport):
 class SafeCookieTransport(SafeTransport, CookieTransport):
     """SafeTransport subclass that supports cookies."""
 
+    internal_refresh = True
     scheme = "https"
 
 
 class KerbTransport(SafeCookieTransport):
     """Handles GSSAPI Negotiation (SPNEGO) authentication."""
+
+    internal_refresh = False
 
     def get_host_info(self, host):
         host, extra_headers, x509 = Transport.get_host_info(self, host)
