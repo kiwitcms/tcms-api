@@ -40,6 +40,18 @@ https://tcms-api.readthedocs.io/en/latest/modules/tcms_api.html
 CHANGELOG
 ---------
 
+
+v12.9 (12 Jan 2024)
+~~~~~~~~~~~~~~~~~~~
+
+- Refresh internal https transport every 4 minutes to avoid an
+  ``ssl.SSLEOFError: EOF occurred in violation of protocol`` error
+  on Python 3.10 and later when executing very long running tests.
+  Limited to non-kerberos connections!
+- Include Python version in ``User-Agent`` header
+- Send XML-RPC method name in ``Referer:`` header to improve logs
+
+
 v12.8.2 (23 Dec 2023)
 ~~~~~~~~~~~~~~~~~~~~~
 
