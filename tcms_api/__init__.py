@@ -5,7 +5,7 @@
 #   Copyright (c) 2012 Red Hat, Inc. All rights reserved.
 #   Author: Petr Splichal <psplicha@redhat.com>
 #
-#   Copyright (c) 2018,2020-2023 Kiwi TCMS project. All rights reserved.
+#   Copyright (c) 2018,2020-2024 Kiwi TCMS project. All rights reserved.
 #   Author: Alexander Todorov <info@kiwitcms.org>
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,35 +101,42 @@ Connect to backend::
 """
 import os
 from configparser import ConfigParser
+from datetime import datetime, timedelta
 from distutils.util import strtobool  # pylint: disable=deprecated-module
 
 from tcms_api.xmlrpc import TCMSXmlrpc, TCMSKerbXmlrpc
 
 
-class TCMS:  # pylint: disable=too-few-public-methods
-    """
-    Takes care of initiating the connection to the TCMS server and
-    parses user configuration.
-    """
-
-    _connection = None
-    _path = os.path.expanduser("~/.tcms.conf")
-
+class _ConnectionProxy:
     def __init__(self):
-        # Connect to the server unless already connected
-        if TCMS._connection is not None:
-            return
+        self.__connected_since = datetime(2024, 1, 1, 0, 0)
+        self.__connection = None
+
+    def server_url(self, config):
+        """
+        Returns the server URL and performs various sanity checks!
+        """
+        # Make sure the server URL is set
+        try:
+            config["tcms"]["url"] is not None
+        except (KeyError, AttributeError) as err:
+            raise RuntimeError(f"No url found in {self._path}") from err
+
+        return config["tcms"]["url"].replace("json-rpc", "xml-rpc")
+
+    def create_connection(self):
+        path = os.path.expanduser("~/.tcms.conf")
 
         # Try system settings when the config does not exist in user directory
-        if not os.path.exists(self._path):
-            self._path = "/etc/tcms.conf"
-        if not os.path.exists(self._path):
-            self._path = "c:/tcms.conf"
-        if not os.path.exists(self._path):
-            raise RuntimeError(f"Config file '{self._path}' not found")
+        if not os.path.exists(path):
+            path = "/etc/tcms.conf"
+        if not os.path.exists(path):
+            path = "c:/tcms.conf"
+        if not os.path.exists(path):
+            raise RuntimeError(f"Config file '{path}' not found")
 
         config = ConfigParser()
-        config.read(self._path)
+        config.read(path)
 
         rpc_implementor = None
         server_url = self.server_url(config)
@@ -145,12 +152,40 @@ class TCMS:  # pylint: disable=too-few-public-methods
                     server_url,
                 )
             except KeyError as err:
-                raise RuntimeError(
-                    f"username/password required in {self._path}"
-                ) from err
+                raise RuntimeError(f"username/password required in '{path}'") from err
 
-        TCMS._connection = rpc_implementor.server
-        return
+        self.__connected_since = datetime.now()
+        return rpc_implementor.server
+
+    def __getattr__(self, name):
+        """
+        refresh the connection every 4 minutes to avoid an
+        `ssl.SSLEOFError: EOF occurred in violation of protocol` error with Python >= 3.10
+        In practice I've discovered that 5 minutes works as well, 6 minutes fails so
+        be more cautious and refresh the connection earlier!
+
+        Side note: originally I thought this is related to calling
+        context.set_alpn_protocols(['http/1.1']) inside http/client.py, introduced in
+        https://github.com/python/cpython/commit/f97406be4c0a02c1501c7ab8bc8ef3850eddb962
+        but that doesn't seem to be the case (or is much harder for me to debug)!
+        """
+
+        # NOTE: Method only called for attributes which don't exist, iow
+        # XML-RPC methods, see
+        # https://medium.com/@satishgoda/python-attribute-access-using-getattr-and-getattribute-6401f7425ce6
+        if datetime.now() - self.__connected_since > timedelta(minutes=4):
+            self.__connection = self.create_connection()
+        elif self.__connection is None:
+            self.__connection = self.create_connection()
+
+        return self.__connection.__getattr__(name)
+
+
+class TCMS:  # pylint: disable=too-few-public-methods
+    """
+    Takes care of initiating the connection to the TCMS server and
+    parses user configuration using a utilities class!
+    """
 
     @property
     def exec(self):
@@ -158,16 +193,4 @@ class TCMS:  # pylint: disable=too-few-public-methods
         Property that returns the underlying XML-RPC connection on which
         you can call various server-side functions.
         """
-        return TCMS._connection
-
-    def server_url(self, config):
-        """
-        Returns the server URL and performs various sanity checks!
-        """
-        # Make sure the server URL is set
-        try:
-            config["tcms"]["url"] is not None
-        except (KeyError, AttributeError) as err:
-            raise RuntimeError(f"No url found in {self._path}") from err
-
-        return config["tcms"]["url"].replace("json-rpc", "xml-rpc")
+        return _ConnectionProxy()
