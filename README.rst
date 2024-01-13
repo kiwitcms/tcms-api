@@ -40,6 +40,12 @@ https://tcms-api.readthedocs.io/en/latest/modules/tcms_api.html
 CHANGELOG
 ---------
 
+v12.9.1 (13 Jan 2024)
+~~~~~~~~~~~~~~~~~~~~~
+
+- Refactor RPC connection refresh using a proxy-class pattern which also
+  takes care to call ``.login()`` upon refresh
+
 
 v12.9 (12 Jan 2024)
 ~~~~~~~~~~~~~~~~~~~
