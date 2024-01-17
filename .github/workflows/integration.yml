@@ -49,13 +49,6 @@ jobs:
         sudo apt-get install libkrb5-dev
         pip install gssapi
 
-    - name: Build intermediary kiwitcms/kiwi image
-      run: |
-          git clone --branch=python3.11 https://github.com/kiwitcms/Kiwi
-          make -C Kiwi/ docker-image
-          docker tag kiwitcms/kiwi:latest kiwitcms/kiwi:12.7.9999
-          docker images
-
     - name: Build & start services
       run: |
         make build-services
