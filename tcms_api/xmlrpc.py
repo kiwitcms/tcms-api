@@ -177,7 +177,9 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
         # note: by default will follow redirects
         with requests.sessions.Session() as session:
             response = session.get(url, headers=headers)
-            assert response.status_code == HTTPStatus.OK
+            if response.status_code != HTTPStatus.OK:
+                raise RuntimeError(f"Unexpected HTTP response {response}")
+
             self.transport._cookies.append(  # pylint: disable=protected-access
                 self.session_cookie_name
                 + "="
