@@ -120,7 +120,8 @@ class _ConnectionProxy:
         self.__connection = None
         self.__config = config
 
-    def server_url(self, config):
+    @staticmethod
+    def server_url(config):
         """
         Returns the server URL and performs various sanity checks!
         """
