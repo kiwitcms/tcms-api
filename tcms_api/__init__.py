@@ -89,6 +89,13 @@ Connect to backend::
     for test_case in rpc_client.exec.TestCase.filter({'pk': 46490}):
         print(test_case)
 
+
+After tcms-api v13.2 you can pass connection configuration directly as
+arguments when initializing the TCMS() class::
+
+    TCMS("https://kiwitcms.example.com/xml-rpc/", "api-bot", "keep-me-secret")
+
+
 .. important::
 
     For a list of available RPC methods see
@@ -108,9 +115,10 @@ from tcms_api.xmlrpc import TCMSXmlrpc, TCMSKerbXmlrpc
 
 
 class _ConnectionProxy:
-    def __init__(self):
+    def __init__(self, config):
         self.__connected_since = datetime(2024, 1, 1, 0, 0)
         self.__connection = None
+        self.__config = config
 
     def server_url(self, config):
         """
@@ -120,23 +128,29 @@ class _ConnectionProxy:
         try:
             config["tcms"]["url"] is not None
         except (KeyError, AttributeError) as err:
-            raise RuntimeError(f"No url found in {self._path}") from err
+            raise RuntimeError(f"No url found in {config}") from err
 
         return config["tcms"]["url"].replace("json-rpc", "xml-rpc")
 
     def create_connection(self):
-        path = os.path.expanduser("~/.tcms.conf")
+        # try authentication credentials from Python arguments first
+        if self.__config["tcms"]["url"]:
+            config = self.__config
+        else:
+            # if not provided then try reading from the filesystem
+            path = os.path.expanduser("~/.tcms.conf")
 
-        # Try system settings when the config does not exist in user directory
-        if not os.path.exists(path):
-            path = "/etc/tcms.conf"
-        if not os.path.exists(path):
-            path = "c:/tcms.conf"
-        if not os.path.exists(path):
-            raise RuntimeError(f"Config file '{path}' not found")
+            # Try system settings when the config does not exist in user directory
+            if not os.path.exists(path):
+                path = "/etc/tcms.conf"
+            if not os.path.exists(path):
+                path = "c:/tcms.conf"
 
-        config = ConfigParser()
-        config.read(path)
+            if not os.path.exists(path):
+                raise RuntimeError(f"Config file '{path}' not found")
+
+            config = ConfigParser()
+            config.read(path)
 
         rpc_implementor = None
         server_url = self.server_url(config)
@@ -187,10 +201,19 @@ class TCMS:  # pylint: disable=too-few-public-methods
     parses user configuration using a utilities class!
     """
 
+    def __init__(self, url=None, username=None, password=None):
+        self.config = {
+            "tcms": {
+                "url": url,
+                "username": username,
+                "password": password,
+            }
+        }
+
     @property
     def exec(self):
         """
         Property that returns the underlying XML-RPC connection on which
         you can call various server-side functions.
         """
-        return _ConnectionProxy()
+        return _ConnectionProxy(self.config)
