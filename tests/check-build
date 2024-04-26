@@ -24,7 +24,7 @@ twine check dist/* || exit 1
 
 # then run some sanity tests
 echo "..... Searching for .pyc files inside the built packages"
-matched_files=`tar -tvf dist/tcms-api-*.tar.gz | grep -c "\.pyc"`
+matched_files=`tar -tvf dist/tcms_api-*.tar.gz | grep -c "\.pyc"`
 if [ "$matched_files" -gt "0" ]; then
     echo "ERROR: .pyc files found in .tar.gz package"
     exit 1
@@ -46,7 +46,7 @@ virtualenv -q -p $(which python) .venv/test-tarball
 source .venv/test-tarball/bin/activate
 #pip install --upgrade setuptools setuptools_scm==6.0.1 pip
 pip install --no-binary :all: gssapi
-pip install --no-binary :all: dist/tcms-api*.tar.gz
+pip install --no-binary :all: dist/tcms_api*.tar.gz
 pip freeze | grep tcms-api
 deactivate
 rm -rf .venv/
