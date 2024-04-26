@@ -91,6 +91,7 @@ jobs:
         _EOF_
 
         make verify-integration
+        make verify-credentials-via-python
 
     - name: Verify tcms-api can communicate over Kerberos
       if: matrix.os == 'ubuntu-latest' && matrix.gssapi == 'with'

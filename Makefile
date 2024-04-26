@@ -46,6 +46,10 @@ run-services:
 verify-integration:
 	PYTHONPATH=. python -m coverage run --source tcms_api ./tests/krb5/integration_test.py
 
+.PHONY: verify-credentials-via-python
+verify-credentials-via-python:
+	PYTHONPATH=. python -m coverage run --source tcms_api ./tests/krb5/python_credentials_test.py
+
 .PHONY: verify-curl-with-kerberos
 verify-curl-with-kerberos:
 	# make sure curl supports Negotiate authentication
