@@ -15,8 +15,7 @@ rm -rf build/ .cache/ dist/ .eggs/ .tox/ .venv/
 
 echo "..... Building PyPI packages for tcms-api"
 set -e
-$(which python) setup.py sdist >/dev/null
-$(which python) setup.py bdist_wheel >/dev/null
+$(which python) -m build >/dev/null
 set +e
 
 # check rst formatting of README before building the package
