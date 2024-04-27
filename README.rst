@@ -40,6 +40,18 @@ https://tcms-api.readthedocs.io/en/latest/modules/tcms_api.html
 CHANGELOG
 ---------
 
+v13.2 (27 Apr 2024)
+~~~~~~~~~~~~~~~~~~~
+
+- Respect configuration passed as arguments to the ``TCMS()`` class, for example::
+
+    TCMS("https://kiwitcms.example.com/xml-rpc/", "api-bot", "keep-me-secret")
+
+- Adjust usage examples and documentation for ``.exec()``. Closes
+  `Issue #77 <https://github.com/kiwitcms/tcms-api/issues/77>`_
+- Internal changes related to testing and building this package
+
+
 v12.9.1 (13 Jan 2024)
 ~~~~~~~~~~~~~~~~~~~~~
 
