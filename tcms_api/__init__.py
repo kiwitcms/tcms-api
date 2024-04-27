@@ -84,16 +84,16 @@ Connect to backend::
 
     from tcms_api import TCMS
 
-    rpc_client = TCMS()
+    rpc = TCMS().exec
 
-    for test_case in rpc_client.exec.TestCase.filter({'pk': 46490}):
+    for test_case in rpc.TestCase.filter({'pk': 46490}):
         print(test_case)
 
 
 After tcms-api v13.2 you can pass connection configuration directly as
 arguments when initializing the TCMS() class::
 
-    TCMS("https://kiwitcms.example.com/xml-rpc/", "api-bot", "keep-me-secret")
+    TCMS("https://kiwitcms.example.com/xml-rpc/", "api-bot", "keep-me-secret").exec
 
 
 .. important::
@@ -216,5 +216,14 @@ class TCMS:  # pylint: disable=too-few-public-methods
         """
         Property that returns the underlying XML-RPC connection on which
         you can call various server-side functions.
+
+        .. important::
+
+            Call this property once and assign it to a temporary variable as
+            shown in the examples above. Then use the ``rpc`` variable to
+            access the different RPC methods!
+
+            Starting with tcms-api v12.9.1 this property is automatically refreshed
+            every 4 minutes to avoid SSL connection timeout errors!
         """
         return _ConnectionProxy(self.config)
