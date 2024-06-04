@@ -13,4 +13,6 @@ RUN dnf -y --setopt=tsflags=nodocs install krb5-server krb5-workstation  && \
     /usr/sbin/kadmin.local -q "add_principal -pw changeme HTTP/web.kiwitcms.org" && \
     cat /tmp/ktutil.instructions | /usr/bin/ktutil
 
+RUN klist -k /tmp/application.keytab
+
 CMD /usr/sbin/krb5kdc -n
