@@ -76,6 +76,12 @@ jobs:
         sudo curl --insecure https://web.kiwitcms.org:8443/static/ca.crt --output /usr/local/share/ca-certificates/Kiwi_TCMS_CA.crt
         sudo update-ca-certificates --fresh --verbose
 
+        # this isn't actually needed, b/c the CA is in the system trust store
+        # export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+        # export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+        # export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+        # export SSL_CERT_DIR=/etc/ssl/certs/
+
     - name: Install & configure Kerberos client
       if: matrix.os == 'ubuntu-latest' && matrix.gssapi == 'with'
       run: |
