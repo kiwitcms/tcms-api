@@ -5,6 +5,10 @@ EXPOSE 88
 COPY ./krb5.conf /etc/
 COPY ./ktutil.instructions /tmp/
 
+# Mirrorlist URLs are dead, use the Vault!
+COPY ./vault.repo /etc/yum.repos.d/
+RUN rm -rf /etc/yum.repos.d/CentOS-Stream-*.repo
+
 RUN dnf -y --setopt=tsflags=nodocs install krb5-server krb5-workstation  && \
     sed -i "s/EXAMPLE.COM/KIWITCMS.ORG/g" /var/kerberos/krb5kdc/kdc.conf && \
     sed -i "s/@EXAMPLE.COM//" /var/kerberos/krb5kdc/kadm5.acl            && \
