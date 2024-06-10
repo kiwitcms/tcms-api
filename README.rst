@@ -40,6 +40,12 @@ https://tcms-api.readthedocs.io/en/latest/modules/tcms_api.html
 CHANGELOG
 ---------
 
+v13.3 (10 Jun 2024)
+~~~~~~~~~~~~~~~~~~~
+
+- Update requirements and imports for the ``strtobool()`` function
+
+
 v13.2 (27 Apr 2024)
 ~~~~~~~~~~~~~~~~~~~
 
