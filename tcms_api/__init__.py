@@ -109,7 +109,10 @@ arguments when initializing the TCMS() class::
 import os
 from configparser import ConfigParser
 from datetime import datetime, timedelta
-from distutils.util import strtobool  # pylint: disable=deprecated-module
+try:
+    from distutils.util import strtobool  # pylint: disable=deprecated-module
+except ModuleNotFoundError:
+    from setuptools.dist import strtobool
 
 from tcms_api.xmlrpc import TCMSXmlrpc, TCMSKerbXmlrpc
 
