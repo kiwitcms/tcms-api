@@ -107,7 +107,7 @@ jobs:
     - name: Collect logs
       if: always()
       run: |
-        docker-compose -f tests/krb5/docker-compose.yml logs --no-color > /tmp/docker-compose-${{ matrix.gssapi }}-kerberos.log
+        docker compose -f tests/krb5/docker-compose.yml logs --no-color > /tmp/docker-compose-${{ matrix.gssapi }}-kerberos.log
 
     - name: Upload logs
       uses: actions/upload-artifact@v3
