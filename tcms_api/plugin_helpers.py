@@ -575,7 +575,7 @@ class Backend:
             result = [result]
         return result
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def update_test_execution(
         self,
         test_execution_id,
