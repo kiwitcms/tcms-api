@@ -116,7 +116,14 @@ class TCMSXmlrpc:
     session_cookie_name = "sessionid"
     transport = None
 
-    def __init__(self, username, password, url, allow_unverified_ssl: bool = False, extra_headers: list[tuple[str, str]]=[]):
+    def __init__(
+        self,
+        username,
+        password,
+        url,
+        allow_unverified_ssl: bool = False,
+        extra_headers: list[tuple[str, str]] = [],
+    ):
         if self.transport is None:
             if url.startswith("https://"):
                 self.transport = SafeCookieTransport()
