@@ -119,10 +119,17 @@ from tcms_api.xmlrpc import TCMSXmlrpc, TCMSKerbXmlrpc
 
 
 class _ConnectionProxy:
-    def __init__(self, config):
+    def __init__(
+        self,
+        config,
+        allow_unverified_ssl: bool = False,
+        extra_headers: list[tuple[str, str]] = [],
+    ):
         self.__connected_since = datetime(2024, 1, 1, 0, 0)
         self.__connection = None
         self.__config = config
+        self.__allow_unverified_ssl = allow_unverified_ssl
+        self.__extra_headers = extra_headers
 
     @staticmethod
     def server_url(config):
@@ -169,6 +176,8 @@ class _ConnectionProxy:
                     config["tcms"]["username"],
                     config["tcms"]["password"],
                     server_url,
+                    allow_unverified_ssl=self.__allow_unverified_ssl,
+                    extra_headers=self.__extra_headers,
                 )
             except KeyError as err:
                 raise RuntimeError(f"username/password required in '{path}'") from err
@@ -206,7 +215,14 @@ class TCMS:  # pylint: disable=too-few-public-methods
     parses user configuration using a utilities class!
     """
 
-    def __init__(self, url=None, username=None, password=None):
+    def __init__(
+        self,
+        url=None,
+        username=None,
+        password=None,
+        allow_unverified_ssl: bool = False,
+        extra_headers: list[tuple[str, str]] = [],
+    ):
         self.config = {
             "tcms": {
                 "url": url,
@@ -214,6 +230,9 @@ class TCMS:  # pylint: disable=too-few-public-methods
                 "password": password,
             }
         }
+
+        self.allow_unverified_ssl = allow_unverified_ssl
+        self.extra_headers = extra_headers
 
     @property
     def exec(self):
@@ -230,4 +249,8 @@ class TCMS:  # pylint: disable=too-few-public-methods
             Starting with tcms-api v12.9.1 this property is automatically refreshed
             every 4 minutes to avoid SSL connection timeout errors!
         """
-        return _ConnectionProxy(self.config)
+        return _ConnectionProxy(
+            config=self.config,
+            allow_unverified_ssl=self.allow_unverified_ssl,
+            extra_headers=self.extra_headers,
+        )
