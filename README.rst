@@ -40,6 +40,15 @@ https://tcms-api.readthedocs.io/en/latest/modules/tcms_api.html
 CHANGELOG
 ---------
 
+v15.0 (22 Sep 2025)
+~~~~~~~~~~~~~~~~~~~
+
+- Include host URL in Referer header
+- Updates for newer pylint
+- Updates for newer Sphynx
+- Update GitHub actions
+
+
 v13.3 (10 Jun 2024)
 ~~~~~~~~~~~~~~~~~~~
 
