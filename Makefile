@@ -64,4 +64,4 @@ verify-web-login: verify-curl-with-kerberos
 	cat /tmp/curl.log | grep 'Your Test plans'
 
 	# verify username is 'travis', e.g. taken from 'travis@KIWITCMS.ORG' principal
-	cat /tmp/curl.log | grep '<a href="/accounts/travis/profile/" target="_parent">My profile</a>'
+	cat /tmp/curl.log | grep '/plan/search/?author=travis'
