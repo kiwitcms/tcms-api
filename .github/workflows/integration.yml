@@ -113,6 +113,6 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: logs
+        name: logs-${{ matrix.gssapi }}-gssapi
         path: /tmp/*.log
         if-no-files-found: ignore
