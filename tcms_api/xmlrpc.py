@@ -24,7 +24,9 @@ _PYTHON_VERSION = sys.version.replace("\n", "")
 
 class TCMSProxy(ServerProxy):
     def __request(self, methodname, params):
-        self._ServerProxy__transport._extra_headers = [("Referer", methodname)]
+        self._ServerProxy__transport._extra_headers = [
+            ("Referer", f"{methodname}@{self._ServerProxy__host}")
+        ]
         return self._ServerProxy__request(methodname, params)
 
     def __getattr__(self, name):
