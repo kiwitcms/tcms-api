@@ -11,11 +11,7 @@ pylint:
 
 .PHONY: test
 test:
-	python -m coverage run --source tcms_api setup.py test
-
-.PHONY: test-codecov
-test-codecov: test
-	codecov
+	pytest -v --ignore=tests/krb5/ tests/
 
 .PHONY: build
 build:
@@ -44,11 +40,11 @@ run-services:
 
 .PHONY: verify-integration
 verify-integration:
-	PYTHONPATH=. python -m coverage run --source tcms_api ./tests/krb5/integration_test.py
+	PYTHONPATH=. pytest -v ./tests/krb5/integration_test.py
 
 .PHONY: verify-credentials-via-python
 verify-credentials-via-python:
-	PYTHONPATH=. python -m coverage run --source tcms_api ./tests/krb5/python_credentials_test.py
+	PYTHONPATH=. pytest -v ./tests/krb5/python_credentials_test.py
 
 .PHONY: verify-curl-with-kerberos
 verify-curl-with-kerberos:

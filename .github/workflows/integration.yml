@@ -116,7 +116,3 @@ jobs:
         name: logs
         path: /tmp/*.log
         if-no-files-found: ignore
-
-    - name: Submit coverage report
-      run: |
-        codecov --token=cf379ef9-76c2-4aa9-9bf5-5c01303222e0
