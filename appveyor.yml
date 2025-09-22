@@ -9,7 +9,7 @@ environment:
   matrix:
     - MAKE: flake8
     - MAKE: pylint
-    - MAKE: test-codecov
+    - MAKE: test
     - MAKE: build
 
 install:
