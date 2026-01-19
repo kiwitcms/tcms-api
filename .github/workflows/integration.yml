@@ -57,6 +57,31 @@ jobs:
         WEB_ADDR=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web_kiwitcms_org`
         sudo sh -c "echo '$WEB_ADDR    web.kiwitcms.org' >> /etc/hosts"
 
+    - name: Install ca.crt from Kiwi TCMS
+      run: |
+        # regenerate new certificate, valid for the hostname used during testing
+        docker exec -i web_kiwitcms_org /usr/bin/sscg -v -f \
+                                            --hostname "web.kiwitcms.org"  \
+                                            --country BG --locality Sofia \
+                                            --organization "Kiwi TCMS" \
+                                            --organizational-unit "Quality Engineering" \
+                                            --ca-file       /Kiwi/static/ca.crt     \
+                                            --cert-file     /Kiwi/ssl/localhost.crt \
+                                            --cert-key-file /Kiwi/ssl/localhost.key
+
+        # restart web service so that it uses the new certificate
+        docker-compose -f tests/krb5/docker-compose.yml restart web_kiwitcms_org
+
+        sudo mkdir -p /usr/local/share/ca-certificates/
+        sudo curl --insecure https://web.kiwitcms.org:8443/static/ca.crt --output /usr/local/share/ca-certificates/Kiwi_TCMS_CA.crt
+        sudo update-ca-certificates --fresh --verbose
+
+        # this isn't actually needed, b/c the CA is in the system trust store
+        # export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+        # export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+        # export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+        # export SSL_CERT_DIR=/etc/ssl/certs/
+
     - name: Install & configure Kerberos client
       if: matrix.os == 'ubuntu-latest' && matrix.gssapi == 'with'
       run: |
