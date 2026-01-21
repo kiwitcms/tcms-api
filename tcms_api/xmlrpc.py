@@ -1,6 +1,8 @@
 # pylint: disable=protected-access,too-few-public-methods
 
+import ssl
 import sys
+from typing import Optional
 import urllib.parse
 
 from base64 import b64encode
@@ -116,7 +118,14 @@ class TCMSXmlrpc:
     session_cookie_name = "sessionid"
     transport = None
 
-    def __init__(self, username, password, url):
+    def __init__(
+        self,
+        username,
+        password,
+        url,
+        allow_unverified_ssl: bool = False,
+        extra_headers: list[tuple[str, str]] = [],
+    ):
         if self.transport is None:
             if url.startswith("https://"):
                 self.transport = SafeCookieTransport()
@@ -124,6 +133,12 @@ class TCMSXmlrpc:
                 self.transport = CookieTransport()
             else:
                 raise RuntimeError("Unrecognized URL scheme")
+
+        if allow_unverified_ssl:
+            ssl._create_default_https_context = ssl._create_unverified_context
+
+        if len(extra_headers) > 0:
+            self.transport._headers += extra_headers
 
         self.server = TCMSProxy(
             url, transport=self.transport, verbose=VERBOSE, allow_none=1
