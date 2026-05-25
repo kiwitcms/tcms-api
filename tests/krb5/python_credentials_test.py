@@ -12,7 +12,6 @@ from unittest.mock import patch
 import requests
 from tcms_api import TCMS
 
-
 try:
     _create_unverified_https_context = ssl._create_unverified_context
 except AttributeError:

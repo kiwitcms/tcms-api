@@ -17,7 +17,6 @@ import requests
 
 from tcms_api.version import __version__
 
-
 VERBOSE = 0
 _PYTHON_VERSION = sys.version.replace("\n", "")
 
