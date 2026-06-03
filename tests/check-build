@@ -44,7 +44,6 @@ set -e
 echo "..... Trying to install the new tarball inside a virtualenv"
 virtualenv -q -p $(which python) .venv/test-tarball
 source .venv/test-tarball/bin/activate
-#pip install --upgrade setuptools setuptools_scm==6.0.1 pip
 pip install --no-binary :all: gssapi
 pip install --no-binary :all: dist/tcms_api*.tar.gz
 pip freeze | grep tcms-api
@@ -54,7 +53,6 @@ rm -rf .venv/
 echo "..... Trying to install the new wheel inside a virtualenv"
 virtualenv -q -p $(which python) .venv/test-wheel
 source .venv/test-wheel/bin/activate
-#pip install --upgrade setuptools setuptools_scm==6.0.1 pip
 pip install gssapi
 pip install --only-binary :all: dist/tcms_api*.whl
 pip freeze | grep tcms-api
