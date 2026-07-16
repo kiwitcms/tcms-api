@@ -52,10 +52,12 @@ class DoNotVerifySSLSession(requests.sessions.Session):
 
 def patch_session(test_method):
     """Decorator to patch requests session for SSL verification."""
+
     def wrapper(self):
         with patch("requests.sessions.Session") as session:
             session.return_value = DoNotVerifySSLSession()
             return test_method(self)
+
     return wrapper
 
 
@@ -118,9 +120,7 @@ class DebugTestAllRPCMethods(unittest.TestCase):
         class_id = self.rpc.Classification.filter({"name": "test-products"})[0]["id"]
         name = f"tcms-api-debug-{self.now}"
         try:
-            result = self.rpc.Product.create(
-                {"name": name, "classification": class_id}
-            )
+            result = self.rpc.Product.create({"name": name, "classification": class_id})
             self.assertEqual(result["name"], name)
         except Exception as e:
             self.assertIn("PermissionDenied", str(type(e).__name__))
@@ -389,9 +389,7 @@ class DebugTestAllRPCMethods(unittest.TestCase):
         cases = self.rpc.TestCase.filter({})
         if cases:
             try:
-                self.rpc.TestCase.add_component(
-                    cases[0]["id"], "debug-non-existent"
-                )
+                self.rpc.TestCase.add_component(cases[0]["id"], "debug-non-existent")
             except Exception as e:
                 # DoesNotExist is expected here - but not a protocol error
                 self.assertNotIn("Fault", str(type(e).__name__))
@@ -627,9 +625,7 @@ class DebugTestAllRPCMethods(unittest.TestCase):
 
                 # TestExecution.remove_comment
                 try:
-                    self.rpc.TestExecution.remove_comment(
-                        exec_id, comment_result["id"]
-                    )
+                    self.rpc.TestExecution.remove_comment(exec_id, comment_result["id"])
                 except Exception:
                     pass
             except Exception as e:
