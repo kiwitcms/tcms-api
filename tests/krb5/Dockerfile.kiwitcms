@@ -1,7 +1,7 @@
 FROM kiwitcms/kiwi
 
 USER 0
-RUN dnf -y --nodocs install gcc krb5-devel python3.12-devel && \
+RUN dnf -y --nodocs install gcc krb5-devel krb5-workstation python3.12-devel && \
     dnf clean all
 USER 1001
 

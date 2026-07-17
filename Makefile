@@ -54,9 +54,9 @@ verify-curl-with-kerberos:
 .PHONY: verify-web-login
 verify-web-login: verify-curl-with-kerberos
 	# grab the page
-	curl -k -L -o /tmp/curl.log --negotiate -u: \
+	curl -k -v -L -o /tmp/curl.log -X POST --negotiate -u: \
 	     -b /tmp/cookie.jar -c /tmp/cookie.jar \
-	    https://web.kiwitcms.org:8443/login/kerberos/
+	    https://web.kiwitcms.org:8443/login/kerberos/ 2>&1 | tee /tmp/curl-verbose.log
 
 	# verify user has been logged in
 	cat /tmp/curl.log | grep 'Kiwi TCMS - Dashboard'
