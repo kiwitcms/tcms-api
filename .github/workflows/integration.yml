@@ -93,6 +93,13 @@ jobs:
     - name: Verify web login with Kerberos
       if: matrix.os == 'ubuntu-latest' && matrix.gssapi == 'with'
       run: |
+        # dump container logs for debugging
+        docker logs web_kiwitcms_org > /tmp/web-container-stdout.log 2>&1
+        # check keytab inside container
+        docker exec web_kiwitcms_org klist -k /Kiwi/application.keytab > /tmp/keytab-check.log 2>&1
+        # check Kerberos config inside container
+        docker exec web_kiwitcms_org cat /etc/krb5.conf > /tmp/container-krb5.conf 2>&1
+
         make verify-web-login
         klist
 
