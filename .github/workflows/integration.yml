@@ -57,6 +57,21 @@ jobs:
         WEB_ADDR=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web_kiwitcms_org`
         sudo sh -c "echo '$WEB_ADDR    web.kiwitcms.org' >> /etc/hosts"
 
+    - name: Wait for web server to be ready
+      run: |
+        for i in $(seq 1 30); do
+          if curl -sk -o /dev/null -w '%{http_code}' \
+            https://web.kiwitcms.org:8443/accounts/login/ \
+            | grep -q 200; then
+            echo "Web server is ready!"
+            exit 0
+          fi
+          echo "Waiting for web server... ($i/30)"
+          sleep 2
+        done
+        echo "Web server didn't become ready"
+        exit 1
+
     - name: Install & configure Kerberos client
       if: matrix.os == 'ubuntu-latest' && matrix.gssapi == 'with'
       run: |
