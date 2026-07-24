@@ -1,5 +1,3 @@
-version: '2'
-
 services:
     krb5_kiwitcms_org:
         container_name: krb5_kiwitcms_org
