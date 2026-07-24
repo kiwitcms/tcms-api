@@ -40,7 +40,6 @@ setup(
     long_description_content_type="text/x-rst",
     maintainer="Kiwi TCMS",
     maintainer_email="info@kiwitcms.org",
-    license="LGPLv2+",
     url="https://github.com/kiwitcms/tcms-api",
     python_requires=">=3.6",
     install_requires=get_install_requires("requirements.txt"),
@@ -52,8 +51,6 @@ setup(
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
-        "License :: OSI Approved :: GNU Lesser General Public License v2"
-        + " or later (LGPLv2+)",
         "Operating System :: POSIX",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.12",
