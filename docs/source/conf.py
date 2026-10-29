@@ -22,8 +22,6 @@ from tcms_api.version import __version__
 # generate documentation from Python sources
 subprocess.run(["make", "-C", "../", "apidoc"], check=True)
 
-autodoc_mock_imports = ["gssapi"]
-
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.

@@ -2,6 +2,7 @@
 
 import sys
 import urllib.parse
+import warnings
 
 from base64 import b64encode
 from http import HTTPStatus
@@ -19,6 +20,13 @@ from tcms_api.version import __version__
 
 VERBOSE = 0
 _PYTHON_VERSION = sys.version.replace("\n", "")
+
+_KERBEROS_DEPRECATION = (
+    "Kerberos/GSSAPI authentication is no longer supported since Kiwi TCMS "
+    "v16.5! This functionality is deprecated, should not be used and will be "
+    "removed in a future release of tcms-api. Use username/password "
+    "authentication instead."
+)
 
 
 class TCMSProxy(ServerProxy):
@@ -62,6 +70,10 @@ class SafeCookieTransport(SafeTransport, CookieTransport):
 
 class KerbTransport(SafeCookieTransport):
     """Handles GSSAPI Negotiation (SPNEGO) authentication."""
+
+    def __init__(self, *args, **kwargs):
+        warnings.warn(_KERBEROS_DEPRECATION, DeprecationWarning, stacklevel=2)
+        super().__init__(*args, **kwargs)
 
     def get_host_info(self, host):
         host, extra_headers, x509 = Transport.get_host_info(self, host)
@@ -153,9 +165,16 @@ class TCMSKerbXmlrpc(TCMSXmlrpc):
     that is not supported nor guaranteed!
     """
 
-    transport = KerbTransport()
+    # NOTE: created on demand so that simply importing this module doesn't
+    # emit a DeprecationWarning when the class definition is evaluated
+    transport = None
 
     def __init__(self, username, password, url):
+        warnings.warn(_KERBEROS_DEPRECATION, DeprecationWarning, stacklevel=2)
+
+        if self.transport is None:
+            self.transport = KerbTransport()
+
         if not url.startswith("https://"):
             raise RuntimeError(
                 f"https:// required for GSSAPI authentication. URL provided: {url}"
