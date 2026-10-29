@@ -1,10 +1,12 @@
 services:
-    krb5_kiwitcms_org:
-        container_name: krb5_kiwitcms_org
-        image: kiwitcms/kerberos
-        restart: always
-
     web_kiwitcms_org:
         container_name: web_kiwitcms_org
-        image: kiwitcms/with-kerberos
+        image: pub.kiwitcms.eu/kiwitcms/kiwi
         restart: always
+        environment:
+            # use sqlite so that no separate database server is required
+            # NOTE: keep the name relative! get_secret() treats values
+            # starting with "/" as paths to secret files and would try to
+            # read the database file itself
+            KIWI_DB_ENGINE: django.db.backends.sqlite3
+            KIWI_DB_NAME: kiwi.db.sqlite

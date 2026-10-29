@@ -13,12 +13,6 @@ environment:
     - MAKE: build
 
 install:
-  # install MIT Kerberos for Windows
-  - SET PATH=%PATH%;"C:\\Program Files\\MIT\\Kerberos\\bin"'
-  - "curl -fsS -o kfw-4.1-amd64.msi https://web.mit.edu/kerberos/dist/kfw/4.1/kfw-4.1-amd64.msi"
-  # NOTE: always exit 0 b/c the installer needs restart but we're forcing it not to
-  - "msiexec /i kfw-4.1-amd64.msi /quiet /qn /norestart & exit 0"
-
   # Prepend Python to the PATH of this build (this cannot be done from inside
   # the powershell script as it would require to restart the parent CMD process).
   # cygwin64\bin contains all commands used by 'make build'
@@ -39,6 +33,4 @@ artifacts:
 test_script:
   - 'sed -i "s|-p \$(which python)||" tests/check-build'
   - 'sed -i "s|bin/activate|Scripts/activate|" tests/check-build'
-  - 'sed -i "s|--no-binary :all: gssapi|--only-binary :all: gssapi|" tests/check-build'
-  - 'sed -i "s|pip install gssapi||" tests/check-build'
   - "make %MAKE%"

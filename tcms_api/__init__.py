@@ -32,36 +32,12 @@ Installation::
     pip install tcms-api
 
 
-If you want to use Kerberos then::
-
-    pip install tcms-api[gssapi]
-
-**WARNING:** on Windows you need to install MIT Kerberos and make sure
-``C:\\Program Files\\MIT\\Kerberos\\bin`` is included in ``%PATH%`` -
-this is usually the case when you install and restart! It must be
-a 64bit installation, see
-`MIT Kerberos for Windows 4.1 <https://web.mit.edu/kerberos/dist/index.html#kfw-4.1>`_
-
-**WARNING:** on Linux you will need gcc, Python and kerberos devel packages to
-build ``gssapi`` because it doesn't provide binary packages via PyPI. Try
-``dnf install gcc krb5-devel python3-devel`` (Red Hat/Fedora) or
-``apt-get install gcc libkrb5-dev libpython3-dev`` (Debian/Ubuntu).
-
-
 Minimal config file ``~/.tcms.conf``::
 
     [tcms]
     url = https://tcms.server/xml-rpc/
     username = your-username
     password = your-password
-
-For Kerberos specify the ``use_kerberos = True`` key without username
-and password! Also make sure that your ``/etc/krb5.conf`` contains::
-
-    [libdefaults]
-    default_realm = .EXAMPLE.COM
-
-where ``EXAMPLE.COM`` matches the realm in your organization.
 
 
 .. important::
