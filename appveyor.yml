@@ -4,7 +4,7 @@ image:
 
 environment:
   global:
-    PYTHON: "C:\\Python312-x64"
+    PYTHON: "C:\\Python314-x64"
 
   matrix:
     - MAKE: flake8
@@ -16,7 +16,7 @@ install:
   # Prepend Python to the PATH of this build (this cannot be done from inside
   # the powershell script as it would require to restart the parent CMD process).
   # cygwin64\bin contains all commands used by 'make build'
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;C:\\Users\\appveyor\\AppData\\Roaming\\Python\\Python312\\Scripts;C:\\cygwin64\\bin;%PATH%"
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;C:\\Users\\appveyor\\AppData\\Roaming\\Python\\Python314\\Scripts;C:\\cygwin64\\bin;%PATH%"
 
   - "python --version"
   - "python -m pip install --upgrade setuptools"
