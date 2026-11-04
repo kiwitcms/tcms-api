@@ -19,7 +19,7 @@ jobs:
       matrix:
         # note: always use the -latest OS variants b/c if conditions
         # match them as literals
-        os: [ubuntu-latest]
+        os: [ubuntu-26.04]
         python-version: [3.14]
 
     steps:
@@ -33,7 +33,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install Python dependencies on Linux
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-26.04'
       run: |
         pip install -r devel.txt
 
