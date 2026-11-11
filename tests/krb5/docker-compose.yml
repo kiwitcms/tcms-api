@@ -1,7 +1,7 @@
 services:
     web_kiwitcms_org:
         container_name: web_kiwitcms_org
-        image: pub.kiwitcms.eu/kiwitcms/kiwi
+        image: pub.kiwitcms.eu/kiwitcms/kiwitcms
         restart: always
         environment:
             # use sqlite so that no separate database server is required

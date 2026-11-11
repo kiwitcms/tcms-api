@@ -195,7 +195,7 @@ v9.0 (12 January 2021)
 - Compatible with Kiwi TCMS v9.0 or later
 - Method ``Backend.build_id()`` doesn't receive ``product_id`` as firsts
   parameter anymore! Related to Kiwi TCMS
-  `Issue #246 <https://github.com/kiwitcms/Kiwi/issues/246>`_
+  `Issue #246 <https://github.com/kiwitcms/kiwitcms/issues/246>`_
 
 
 v8.6.0 (28 October 2020)
