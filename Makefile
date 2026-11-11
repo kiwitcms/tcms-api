@@ -19,7 +19,7 @@ build:
 
 .PHONY: build-services
 build-services:
-	docker pull pub.kiwitcms.eu/kiwitcms/kiwi
+	docker pull pub.kiwitcms.eu/kiwitcms/kiwitcms
 
 .PHONY: run-services
 run-services:
